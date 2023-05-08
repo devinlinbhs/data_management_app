@@ -1,5 +1,7 @@
 from myapp.route import db
+# db is defined at route
 
+# Setting up all the tables for the SQLAlchemy
 class Candidate(db.Model):
     __tablename__ = "Candidate"
     id = db.Column(db.Integer, primary_key=True)
@@ -10,7 +12,8 @@ class Candidate(db.Model):
     ethnicity = db.Column(db.Text())
     student_year_level = db.Column(db.Integer())
     data_year_id = db.Column(db.Integer, db.ForeignKey("Data_year.id"))
-    
+    # Only 1 foreign key from "Data_year" table
+    # With 1 primary key
 
 class Data_year(db.Model):
     __tablename__ = "Data_year"
