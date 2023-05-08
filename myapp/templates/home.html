@@ -1,0 +1,51 @@
+hello
+{% for candidate in candidates_list %}
+{{candidate.name}}
+{{candidate.student_id}}
+{{candidate.nsn}}
+<br>
+<br>
+{% endfor %}
+
+{% for info in course_information_list %}
+{{info.name}}
+{{info.course_code}}
+{{info.data_year_id}}
+{{info.level}}
+<br>
+<br>
+{% endfor %}
+
+{% for standard in senior_standard_list %}
+{{standard.name}}
+{{standard.standard_year_level}}
+{{standard.assessment_type}}
+{{standard.standard_code}}
+{{standard.credit}}
+{{standard.version}}
+{{standard.data_year_id}}
+<br>
+<br>
+{% endfor %}
+
+{% for grade in grade_obtained_list %}
+{{grade.result}}
+<br>
+<br>
+{% endfor %}
+
+{% for data_year in data_year_list %}
+{{data_year.year_of_data}}
+<br>
+<br>
+{% endfor %}
+
+{% for overall_management in overall_management_list %}
+{{overall_management.candidate_id}}
+{{overall_management.course_information_id}}
+{{overall_management.senior_standard_id}}
+{{overall_management.grade_obtained_id}}
+{{overall_management.data_year_id}}
+<br>
+<br>
+{% endfor %}
