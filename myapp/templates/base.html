@@ -11,13 +11,31 @@
 
     <link rel="stylesheet" href="\static\style.css">
     <!--Link the style.css file with all HTML pages-->
-    
-    
 </head>
 
 
 <body>
+    <!--Put a navigation bar on top of all the HTML(s)-->
+    <nav>
+        <li>
+            <a href="{{url_for('home')}}">HOME</a>
+        </li>
+        <li>
+            <a href="{{url_for('option')}}">Option</a>
+        </li>
+        <li>
+            <a href="{{url_for('subject_trend_filter')}}">Subject Trend Filter</a>
+        </li>
+        <li>
+            <a href="{{url_for('dropout_trend_filter')}}">Dropout Trend Filter</a>
+        </li>
+    </nav>
+
+
     {% block content %}
+    <!--Put the contents of the HTML page here-->
     {% endblock %}
+
+
 </body>
 </html>

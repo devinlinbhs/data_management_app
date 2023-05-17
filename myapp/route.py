@@ -30,3 +30,37 @@ def home():
                         senior_standard_list = senior_standard_list, grade_obtained_list = grade_obtained_list, 
                         data_year_list = data_year_list, overall_management_list = overall_management_list)
     # Return all the data taken from the database
+
+
+@app.route("/option")
+def option():
+    # Should have the boxes of pictures of which filter to use
+    return render_template("option.html")
+
+@app.route("/subject_trend_filter")
+def subject_trend_filter():
+    # Should have the boxes of pictures of which filter to use
+    return render_template("subject_trend_filter.html")
+
+
+@app.route("/dropout_trend_filter")
+def dropout_trend_filter():
+    # Should have the boxes of pictures of which filter to use
+    return render_template("dropout_trend_filter.html")
+
+
+
+
+# The codes below functions properly but shouldn't be confused in with the rest of the codes yet
+# They are not going to be used for a long time
+
+@app.route("/subject_trend_graph")
+def subject_trend_graph():
+    # Should have the boxes of pictures of which filter to use
+    return render_template("subject_trend_graph.html")
+
+
+@app.route("/dropout_trend_graph")
+def dropout_trend_graph():
+    # Should have the boxes of pictures of which filter to use
+    return render_template("dropout_trend_graph.html")
