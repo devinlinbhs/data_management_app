@@ -1,6 +1,7 @@
 from myapp import app
 from flask import render_template
 from flask_sqlalchemy import SQLAlchemy
+import numpy as np
 import os
 
 
@@ -48,7 +49,55 @@ def dropout_trend_filter():
     # Should have the boxes of pictures of which filter to use
     return render_template("dropout_trend_filter.html")
 
+digital_course = ["9DGT","9ELT","10DGT","10ELT","11DTE","11DTG","11DTT","11DTP",
+                "11PCE","12DTE","12DTG","12DTM","12DTP","12PCE","13PCE","13DTE",
+                "13DTG","13DTM","13DTP","13DTS"]
+# NEED TO ASK WHAT COURSES ARE DIGI COURSES
 
+
+@app.route("/data")
+def data():
+    infile = open("student_list.csv", "r")
+    result = infile.read().splitlines()
+    infile.close()
+    
+    student_list = []
+    
+    
+    for line in result:
+        line = line.replace(' (Specify Date, incl Days)', "")
+        line = line.replace('years,', "years")
+        line = line.replace('months,', "months")
+        student = line.split(',')
+        del student[6]
+        courses = student[7].split(';')
+        student_digital_course = [course for course in courses if course in digital_course]
+        
+        """
+        The list of student has:
+        student[0]: Unique ID
+        student[1]: Gender
+        student[2]: Level
+        student[3]: Form class
+        student[4]: Ethnicity
+        student[5]: Age in full
+        student[6]: Attendance -Present in full days
+        student[7]: All the courses taken
+        student[8]: NCEA credits
+        ...
+        """
+        
+        student_np = np.array(student)
+        student = list(student_np[:8])
+        if len(student_digital_course) > 0:
+            student[7] = student_digital_course
+        else:
+            del student[7]
+            
+        student_list.append(student)
+        
+    return render_template("data.html", student_list = student_list,
+                        student_digital_course = student_digital_course)
 
 
 # The codes below functions properly but shouldn't be confused in with the rest of the codes yet

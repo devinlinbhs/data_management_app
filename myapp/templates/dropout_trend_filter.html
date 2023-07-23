@@ -7,6 +7,174 @@
 
 
 {% block content %}
-<!--All the contents go down here-->
-Dropout Trend Filter
+<!--The first box for filtering-->
+
+<form action="/dropout_trend_graph", method="post" class="home_container">
+    <div class="home_container_johnny">
+        <div style="margin-left: 10%;">
+        <h2>Group 1<input type="checkbox" name="appliable_A" value="appliable" default="nothing" checked></h2>
+        
+        <!--First drop down-->
+        <label style= "background-color: rgb(220, 172, 39);">Continue/drop out on subject</label>
+        <br>
+        <select name="group_A">
+            <option value="continous">continous - (default)</option>
+            <option value="dropout">dropout</option>
+        </select>
+        <br>
+        <br>
+        </div>
+
+        <div style="display:flex">
+            <!--Second drop down-->
+            <div style="width: 35%; margin-right: 5%; margin-left: 10%;">
+                <label>From (year)</label>
+                <br>
+                <select name="from_year_A">
+                    <option value="2022">2022 - (default)</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                    <option value="2019">2019</option>
+                    <option value="2018">2018</option>
+                    <option value="2017">2017</option>
+                    <option value="2016">2016</option>
+                </select>
+            </div>
+
+            <div style="width: 35%; margin-left: 5%;">
+                <label>To (year)</label>
+                <br>
+                <select name="to_year_A">
+                    <option value="2022">2022 - (default)</option>
+                    <option value="2021">2021</option>
+                    <option value="2020">2020</option>
+                    <option value="2019">2019</option>
+                    <option value="2018">2018</option>
+                    <option value="2017">2017</option>
+                    <option value="2016">2016</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <br>
+
+
+
+        <div style="display:flex">
+            <!--Third drop down-->
+            <div style="width: 35%; margin-right: 5%; margin-left: 10%;">
+                <label>From (subject)</label>
+                <br>
+                <select name="from_subject_A">
+                    <option value="9DGT">9DGT - (default)</option>
+                    <option value="10DGT">10DGT</option>
+                    <option value="11DTP">11DTP</option>
+                    <option value="12DTP">12DTP</option>
+                    <option value="13DTP">13DTP</option>
+                </select>
+            </div>
+
+            <div style="width: 35%; margin-left: 5%;">
+                <label>From (subject)</label>
+                <br>
+                <select name="to_subject_A">
+                    <option value="9DGT">9DGT - (default)</option>
+                    <option value="10DGT">10DGT</option>
+                    <option value="11DTP">11DTP</option>
+                    <option value="12DTP">12DTP</option>
+                    <option value="13DTP">13DTP</option>
+                </select>
+            </div>
+        </div>
+        <br>
+        <br>
+        
+
+        <div style="width: 35%; margin-right: 5%; margin-left: 10%;"><input type="submit" value="Submit"></div>
+        <!--Data can be retreated in {route.py} by {request.form['name']}-->
+    </div>
+
+    <div class="home_container_devin">
+
+        <div style="margin-left: 10%;">
+            <h2>Group 2<input type="checkbox" name="appliable_B" value="appliable"></h2>
+            
+            <!--First drop down-->
+            <label style= "background-color: rgb(220, 172, 39);">Continue/drop out on subject</label>
+            <br>
+            <select name="group_B">
+                <option value="continous">continous - (default)</option>
+                <option value="dropout">dropout</option>
+            </select>
+            <br>
+            <br>
+            </div>
+    
+            <div style="display:flex">
+                <!--Second drop down-->
+                <div style="width: 35%; margin-right: 5%; margin-left: 10%;">
+                    <label>From (year)</label>
+                    <br>
+                    <select name="from_year_B">
+                        <option value="2022">2022 - (default)</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                    </select>
+                </div>
+    
+                <div style="width: 35%; margin-left: 5%;">
+                    <label>To (year)</label>
+                    <br>
+                    <select name="to_year_B">
+                        <option value="2022">2022 - (default)</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <br>
+    
+    
+    
+            <div style="display:flex">
+                <!--Third drop down-->
+                <div style="width: 35%; margin-right: 5%; margin-left: 10%;">
+                    <label>From (subject)</label>
+                    <br>
+                    <select name="from_subject_B">
+                        <option value="9DGT">9DGT - (default)</option>
+                        <option value="10DGT">10DGT</option>
+                        <option value="11DTP">11DTP</option>
+                        <option value="12DTP">12DTP</option>
+                        <option value="13DTP">13DTP</option>
+                    </select>
+                </div>
+    
+                <div style="width: 35%; margin-left: 5%;">
+                    <label>From (subject)</label>
+                    <br>
+                    <select name="to_subject_B">
+                        <option value="9DGT">9DGT - (default)</option>
+                        <option value="10DGT">10DGT</option>
+                        <option value="11DTP">11DTP</option>
+                        <option value="12DTP">12DTP</option>
+                        <option value="13DTP">13DTP</option>
+                    </select>
+                </div>
+            </div>
+            <br>
+            <br>
+
+    </div>
+</form>
+
 {% endblock %}

@@ -1,0 +1,33 @@
+
+{% for student in student_list %}
+
+<!--Here we have all the students that are doing digi-->
+    {% if student|length == 8 %}
+        {% for line in student %}
+                {{line}}
+                <br>
+        {% endfor %}
+        {{student[7]|length}} = d
+        <br><br>
+    {% endif %}
+<!--
+    {{student}} has
+    student[0]: Unique ID
+    student[1]: Gender
+    student[2]: Level
+    student[3]: Form class
+    student[4]: Ethnicity
+    student[5]: Age in full
+    student[6]: Attendance -Present in full days
+    student[7]: Digital course taken
+-->
+
+
+<!-- This one is all the students
+    {% for line in student %}
+        {{line}}
+        <br>
+    {% endfor %}
+    <br><br>
+-->
+{% endfor %}

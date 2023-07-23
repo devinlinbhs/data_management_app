@@ -6,9 +6,28 @@
     
 
 {% block content %}
+<div class="home_container">
+    <div class="home_container_johnny">
+        <a href="{{url_for('home')}}">
+            <img src="/static/johnny_bar_graph.png" class="home_image">
+        </a>
+        <div class="johnny_discription">
+            This thingy describes what Johnny will do, I think it's about NCEA bar graph creation.
+        </div>
+    </div>
+
+    <div class="home_container_devin">
+        <a href="{{url_for('option')}}">
+            <img src="/static/devin_bar_graph.png" class="home_image">
+        </a>
+        <div class="devin_discription">
+            Internal data for Burnside, generating bar graphs/line graphs to make comparisons and show trends between different years
+        </div>
+    </div>
+    
+</div>
 <!--All the contents go down here-->
-hello
-{% for candidate in candidates_list %}
+<!--{% for candidate in candidates_list %}
 {{candidate.name}}
 {{candidate.student_id}}
 {{candidate.nsn}}
@@ -56,6 +75,6 @@ hello
 {{overall_management.grade_obtained_id}}
 {{overall_management.data_year_id}}
 <br>
-<br>
-{% endfor %}
+<br> 
+{% endfor %}-->
 {% endblock %}
