@@ -4,11 +4,14 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+
+
 
     {% block title %}
     {% endblock %}
     <!--title block for all other HTML pages-->
-
+    
     <link rel="stylesheet" href="\static\style.css">
     <!--Link the style.css file with all HTML pages-->
 </head>
@@ -16,19 +19,25 @@
 
 <body>
     <!--Put a navigation bar on top of all the HTML(s)-->
-    <nav>
-        <li>
-            <a href="{{url_for('home')}}">HOME</a>
-        </li>
-        <li>
-            <a href="{{url_for('option')}}">Option</a>
-        </li>
-        <li>
-            <a href="{{url_for('subject_trend_filter')}}">Subject Trend Filter</a>
-        </li>
-        <li>
-            <a href="{{url_for('dropout_trend_filter')}}">Dropout Trend Filter</a>
-        </li>
+    <nav class="top_nav">
+        <ul class="ul_flex">
+            <li>
+                <a href="{{url_for('home')}}">HOME</a>
+            </li>
+            
+
+            <li>
+                <a href="{{url_for('option')}}">Option</a>
+            </li>
+
+            <li>
+                <a href="{{url_for('subject_trend_filter')}}">Subject Trend Filter</a>
+            </li>
+
+            <li>
+                <a href="{{url_for('dropout_trend_filter')}}">Dropout Trend Filter</a>
+            </li>
+        </ul>
     </nav>
 
 
