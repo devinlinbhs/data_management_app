@@ -1,6 +1,7 @@
 from myapp import app
 from flask import render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
+from sqlalchemy import select, and_, or_
 import numpy as np
 import os
 
@@ -19,17 +20,9 @@ import myapp.models as models
 
 @app.route("/")
 def home():
-    # Currently testing whether SQLAlchemy works
-    candidates_list = models.Candidate.query.all()
-    course_information_list = models.Course_information.query.all()
-    senior_standard_list = models.Senior_standard.query.all()
-    grade_obtained_list = models.Grade_obtained.query.all()
-    data_year_list = models.Data_year.query.all()
-    overall_management_list = models.Overall_management.query.all()
     
-    return render_template("home.html", page_title='Home', candidates_list = candidates_list, course_information_list = course_information_list, 
-                        senior_standard_list = senior_standard_list, grade_obtained_list = grade_obtained_list, 
-                        data_year_list = data_year_list, overall_management_list = overall_management_list)
+    
+    return render_template("home.html", page_title='Home')
     # Return all the data taken from the database
 
 
@@ -125,6 +118,37 @@ def subject_trend_graph():
     return render_template("subject_trend_graph.html")
 
 
+def get_continue_rate(start_course, end_course, start_year, end_year):
+    """helper function which returns the continue rate given by a start course and an end course"""
+    # For Curve A:
+    start_course_entry = models.Result.query.filter(and_(models.Result.course == start_course, models.Result.data_year == start_year)).all()
+    # All the result entry for the course 1
+    start_student_list = []
+    for entry in start_course_entry:
+        student = entry.candidate_id
+        if student not in start_student_list:
+            # If this student is new, add him to the list
+            start_student_list.append(student)
+    # Now we have a list of student who is in the course
+    
+    end_course_entry = models.Result.query.filter(and_(models.Result.course == end_course, models.Result.data_year == end_year)).all()
+    # All the result entry for the course 2
+    end_student_list = []
+    for entry in end_course_entry:
+        student = entry.candidate_id
+        if student not in end_student_list and student in start_student_list:
+            # If this student is new and also taken the prerequisite
+            # Add the student into the "continue category"
+            end_student_list.append(student)
+    # Now we have a list of student in both courses
+    if len(start_student_list) >0:
+        continue_rate = len(end_student_list)/len(start_student_list) *100
+    else:
+        continue_rate = -1
+    
+    return continue_rate
+
+
 @app.route("/dropout_trend_graph", methods = ["GET","POST"])
 def dropout_trend_graph():
     # to see whether the user would like to have 1 or 2 graphs in the same time
@@ -138,17 +162,38 @@ def dropout_trend_graph():
         if request.form.get("appliable_A"):
             appliable_A = request.form['appliable_A']
             group_A = request.form['group_A']
-            from_year_A = request.form['from_year_A']
-            to_year_A = request.form['to_year_A']
-            from_subject_A = request.form['from_subject_A']
-            to_subject_A = request.form['to_subject_A']
+            start_year_A = request.form['from_year_A']
+            end_year_A = request.form['to_year_A']
+            start_course_A = request.form['from_subject_A']
+            end_course_A = request.form['to_subject_A']
         if request.form.get("appliable_B"):
             appliable_B = request.form['appliable_B']
             group_B = request.form['group_B']
-            from_year_B = request.form['from_year_B']
-            to_year_B = request.form['to_year_B']
-            from_subject_B = request.form['from_subject_B']
-            to_subject_B = request.form['to_subject_B']
+            start_year_B = request.form['from_year_B']
+            end_year_B = request.form['to_year_B']
+            start_course_B = request.form['from_subject_B']
+            end_course_B = request.form['to_subject_B']
+            
+    '''Looks complicated, actually you get something like
+    appliable continous
+    2021 2022
+    9DGT 10DGT
+    
+    appliable continous
+    2021 2023
+    9DGT 11DTP
+    
+    indicating that user want to know 
+    Line A: students who continued from 2021 9DGT to 2022 10DGT
+    Line B: students who continued from 2021 9DGT to 2023 11DTP
+    '''
+    continue_rate_A, continue_rate_B = 0,0
+    if appliable_A:
+        continue_rate_A = get_continue_rate(start_course_A, end_course_A, start_year_A, end_year_A)
+    if appliable_B:
+        continue_rate_B = get_continue_rate(start_course_B, end_course_B, start_year_B, end_year_B)
+
+
 
     return render_template("dropout_trend_graph.html", 
                         appliable_A = appliable_A,
@@ -164,4 +209,7 @@ def dropout_trend_graph():
                         to_year_B = to_year_B,
                         from_subject_B = from_subject_B,
                         to_subject_B = to_subject_B,
+
+                        continue_rate_A = continue_rate_A,
+                        continue_rate_B = continue_rate_B
 )
