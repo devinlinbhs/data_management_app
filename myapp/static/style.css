@@ -88,7 +88,17 @@ input[type=checkbox] {
     height: min(2rem, 2vw);
 }
 
+.dropout_graph_container{
+    display: flex;
+    justify-content: center;
+    margin-top: 5%;
+}
 
+
+.dropout_graph{
+    width: 70%;
+    height: 60%;
+}
 
 
 

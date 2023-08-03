@@ -1,33 +1,102 @@
+{% extends 'base.html' %}
 
-{% for student in student_list %}
+{% block title %}
+<title>Test Data</title>
+{% endblock %}
 
-<!--Here we have all the students that are doing digi-->
-    {% if student|length == 8 %}
-        {% for line in student %}
-                {{line}}
-                <br>
-        {% endfor %}
-        {{student[7]|length}} = d
-        <br><br>
-    {% endif %}
+{% block content %}
+<div class="dropout_graph_container">
+    <div class="dropout_graph">
+        <canvas id="dropOutGraph"></canvas>
+    </div>
+</div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!--Link the chart.js-->
+    <script>
+
+    let graph = document.getElementById('dropOutGraph').getContext('2d');
+    
+    Chart.defaults.font.size = 16;
+    let testingGraph = new Chart(graph, 
+    {type: 'line',
+    options: {
+        //intersection with mode index can give labels for both point at the same time//
+        interaction: {
+            mode: 'index',
+            intersect: false,
+        },
+        plugins: {
+            title: {
+                display: true,
+                text: 'Drop Out Trend Graph',
+                font: {
+                    size: 30
+                }
+            },
+            legend:{
+                position: 'right'
+            }
+        },
+    },
+
+        
+    data: {labels: ['2018', '2019', '2020', '2021', '2022', '2023'],
+            datasets: [{label: 'Drop Out Percentage -- Course 1',
+                        data: [20, 19, 3, 5, 12, 3],
+                        borderWidth: 3,
+                        hoverBorderWidth:5,
+                        hoverBorderColor: '#238fb6'},
+
+                        {label: 'Drop Out Percentage -- Course 2',
+                        data: [14, 15, 2, 43, 5, 19],
+                        borderWidth: 3,
+                        hoverBorderWidth:5,}],
+
+    }}
+    );
+
+    </script>
+
+    {{digi_student_list|length}}
+    {{initial_student|length}}
+    {{final_student|length}}
+
 <!--
-    {{student}} has
-    student[0]: Unique ID
-    student[1]: Gender
-    student[2]: Level
-    student[3]: Form class
-    student[4]: Ethnicity
-    student[5]: Age in full
-    student[6]: Attendance -Present in full days
-    student[7]: Digital course taken
+    {% for student in student_list %}
 -->
+    <!--Here we have all the stud5ents that are doing digi-->
+<!--
+        {% if student|length == 8 %}
+            {% for line in student %}
+                    {{line}}
+                    <br>
+            {% endfor %}
+            {{student[7]|length}} = d
+            <br><br>
+        {% endif %}
+-->
+    <!--
+        {{student}} has
+        student[0]: Unique ID
+        student[1]: Gender
+        student[2]: Level
+        student[3]: Form class
+        student[4]: Ethnicity
+        student[5]: Age in full
+        student[6]: Attendance -Present in full days
+        student[7]: Digital course taken
+    -->
 
 
-<!-- This one is all the students
-    {% for line in student %}
-        {{line}}
-        <br>
+    <!-- This one is all the students
+        {% for line in student %}
+            {{line}}
+            <br>
+        {% endfor %}
+        <br><br>
+    -->
+
+<!--
     {% endfor %}
-    <br><br>
+{% endblock %}
 -->
-{% endfor %}

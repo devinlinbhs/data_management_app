@@ -88,16 +88,12 @@
         </div>
         <br>
         <br>
-        
-
-        <div style="width: 35%; margin-right: 5%; margin-left: 10%;"><input type="submit" value="Submit"></div>
-        <!--Data can be retreated in {route.py} by {request.form['name']}-->
     </div>
 
     <div class="home_container_devin">
 
         <div style="margin-left: 10%;">
-            <h2>Group 2<input type="checkbox" name="appliable_B" value="appliable"></h2>
+            <h2>Group 2<input type="checkbox" name="appliable_B" value="appliable" default = 'nothing'></h2>
             
             <!--First drop down-->
             <label style= "background-color: rgb(220, 172, 39);">Continue/drop out on subject</label>
@@ -175,6 +171,8 @@
             <br>
 
     </div>
+    <div style="width: 35%; margin-right: 5%; margin-left: 10%;"><input type="submit" value="Submit"></div>
+    <!--Data can be retreated in {route.py} by {request.form['name']}-->
 </form>
 
 {% endblock %}

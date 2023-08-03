@@ -1,5 +1,5 @@
 from myapp import app
-from flask import render_template
+from flask import render_template, request, redirect
 from flask_sqlalchemy import SQLAlchemy
 import numpy as np
 import os
@@ -49,13 +49,14 @@ def dropout_trend_filter():
     # Should have the boxes of pictures of which filter to use
     return render_template("dropout_trend_filter.html")
 
+
 digital_course = ["9DGT","9ELT","10DGT","10ELT","11DTE","11DTG","11DTT","11DTP",
                 "11PCE","12DTE","12DTG","12DTM","12DTP","12PCE","13PCE","13DTE",
                 "13DTG","13DTM","13DTP","13DTS"]
 # NEED TO ASK WHAT COURSES ARE DIGI COURSES
 
 
-@app.route("/data")
+@app.route("/data", methods = ["GET","POST"])
 def data():
     infile = open("student_list.csv", "r")
     result = infile.read().splitlines()
@@ -93,23 +94,74 @@ def data():
             student[7] = student_digital_course
         else:
             del student[7]
-            
         student_list.append(student)
         
+        digi_student_list = []
+        for student in student_list:
+            if len(student) == 8:
+                digi_student_list.append(student)
+
+        initial_student = []
+        final_student = []
+        for digi_student in digi_student_list:
+            if '9DGT' in digi_student[7]:
+                initial_student.append(digi_student)
+                if '10DGT' in digi_student[7]:
+                    final_student.append(digi_student)
+        
     return render_template("data.html", student_list = student_list,
-                        student_digital_course = student_digital_course)
+                        student_digital_course = student_digital_course,
+                        digi_student_list = digi_student_list,
+                        initial_student = initial_student,
+                        final_student = final_student)
 
 
 # The codes below functions properly but shouldn't be confused in with the rest of the codes yet
 # They are not going to be used for a long time
 
-@app.route("/subject_trend_graph")
+@app.route("/subject_trend_graph", methods = ["GET","POST"])
 def subject_trend_graph():
     # Should have the boxes of pictures of which filter to use
     return render_template("subject_trend_graph.html")
 
 
-@app.route("/dropout_trend_graph")
+@app.route("/dropout_trend_graph", methods = ["GET","POST"])
 def dropout_trend_graph():
-    # Should have the boxes of pictures of which filter to use
-    return render_template("dropout_trend_graph.html")
+    # to see whether the user would like to have 1 or 2 graphs in the same time
+    appliable_A, appliable_B = None, None
+    group_A, group_B = None, None
+    from_year_A, from_year_B = None, None
+    to_year_A, to_year_B = None, None
+    from_subject_A, from_subject_B = None, None
+    to_subject_A, to_subject_B = None, None
+    if request.method == 'POST':
+        if request.form.get("appliable_A"):
+            appliable_A = request.form['appliable_A']
+            group_A = request.form['group_A']
+            from_year_A = request.form['from_year_A']
+            to_year_A = request.form['to_year_A']
+            from_subject_A = request.form['from_subject_A']
+            to_subject_A = request.form['to_subject_A']
+        if request.form.get("appliable_B"):
+            appliable_B = request.form['appliable_B']
+            group_B = request.form['group_B']
+            from_year_B = request.form['from_year_B']
+            to_year_B = request.form['to_year_B']
+            from_subject_B = request.form['from_subject_B']
+            to_subject_B = request.form['to_subject_B']
+
+    return render_template("dropout_trend_graph.html", 
+                        appliable_A = appliable_A,
+                        group_A = group_A,
+                        from_year_A = from_year_A,
+                        to_year_A = to_year_A,
+                        from_subject_A = from_subject_A,
+                        to_subject_A = to_subject_A,
+                        
+                        appliable_B = appliable_B,
+                        group_B = group_B,
+                        from_year_B = from_year_B,
+                        to_year_B = to_year_B,
+                        from_subject_B = from_subject_B,
+                        to_subject_B = to_subject_B,
+)

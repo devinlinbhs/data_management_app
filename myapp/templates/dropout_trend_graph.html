@@ -9,10 +9,26 @@
 {% block content %}
 <!--All the contents go down here-->
 
-{{dropout_filter['group_A']}}
+
 <!--This print off all the filtering data on group A-->
 
-{{dropout_filter['group_B']}}
+{{appliable_A}}
+{{group_A}}
+<br>
+{{from_year_A}}
+{{to_year_A}}
+<br>
+{{from_subject_A}}
+{{to_subject_A}}
+<br>
+<br>
 
-
+{{appliable_B}}
+{{group_B}}
+<br>
+{{from_year_B}}
+{{to_year_B}}
+<br>
+{{from_subject_B}}
+{{to_subject_B}}
 {% endblock %}
