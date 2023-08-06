@@ -118,6 +118,19 @@ def subject_trend_graph():
     return render_template("subject_trend_graph.html")
 
 
+def time_taken(start_course, end_course):
+    """To calculate the time it takes for a student from a starting course to an end course"""
+
+    if start_course[0] == '9':
+        start_course_year = 9
+    else:
+        start_course_year = int(start_course[0]+start_course[1])
+    
+    end_course_year = int(end_course[0]+end_course[1])
+    year_addition = end_course_year - start_course_year
+    
+    return year_addition
+
 def get_continue_rate(start_course, end_course, start_year, end_year, ethnicities):
     """helper function which returns the continue rate given by a start course and an end course"""
     common_ethnicities = ["NZ European", "Maori", "African", "American", "Australian",
@@ -125,6 +138,7 @@ def get_continue_rate(start_course, end_course, start_year, end_year, ethnicitie
                         "Korean","Russian","Samoan"]
     # A list of continue rate from looping through start_year to end_year
     continue_rate = []
+    year_addition = time_taken(start_course, end_course)
     
     for year in range(start_year, end_year +1):
         # i is the current looping year
@@ -160,7 +174,7 @@ def get_continue_rate(start_course, end_course, start_year, end_year, ethnicitie
         # All the result entry for the course 2 that's also in course 1
         end_student_list = []
         if len(ethnicities) == 0 or 'all' in ethnicities:
-            end_course_entry = models.Result.query.filter(and_(models.Result.course == end_course, models.Result.data_year == year + 1)).all()
+            end_course_entry = models.Result.query.filter(and_(models.Result.course == end_course, models.Result.data_year == year + year_addition)).all()
             for entry in end_course_entry:
                 student = entry.candidate_id
                 if student not in end_student_list and student in start_student_list:
@@ -173,10 +187,10 @@ def get_continue_rate(start_course, end_course, start_year, end_year, ethnicitie
                 if ethnicity == 'Others':
                     end_course_entry = models.Result.query.join(models.Candidate).filter(
                                         and_(models.Candidate.ethnicity.notin_(common_ethnicities), models.Result.course == end_course,
-                                            models.Result.data_year == year + 1)).all()
+                                            models.Result.data_year == year + year_addition)).all()
                 else:
                     end_course_entry = models.Result.query.join(models.Candidate).filter(
-                                        and_(models.Result.course == end_course, models.Result.data_year == year + 1, 
+                                        and_(models.Result.course == end_course, models.Result.data_year == year + year_addition, 
                                             models.Candidate.ethnicity == ethnicity)).all()
                 for entry in end_course_entry:
                     student = entry.candidate_id
