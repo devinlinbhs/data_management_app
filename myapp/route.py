@@ -1,5 +1,5 @@
 from myapp import app
-from flask import render_template, request, redirect
+from flask import render_template, request, redirect, session
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import select, and_, or_
 import numpy as np
@@ -39,19 +39,41 @@ def subject_trend_filter1():
 @app.route("/subject_trend_filter2", methods = ["GET","POST"])
 def subject_trend_filter2():
     # Get the secondary filters -- Standard and Ethnicity
-    start_year = request.form['start_year']
-    end_year = request.form['end_year']
-    subject = request.form['subject']
+    session['start_year'] = request.form['start_year']
+    session['end_year'] = request.form['end_year']
+    session['subject'] = request.form['subject']
     
-    return render_template("subject_trend_filter2.html", start_year = start_year,
-                        end_year = end_year, subject = subject)
+    return render_template("subject_trend_filter2.html")
 
 
 @app.route("/subject_trend_graph", methods = ["GET","POST"])
 def subject_trend_graph():
     # Using the information from both filters to display the bar graph
+    start_year = session['start_year']
+    end_year = session['end_year']
+    subject = session['subject']
     
-    return render_template("subject_trend_graph.html")
+    appliable_B, appliable_C = None, None
+    standard_B = None
+    ethnicity_B = None
+    
+    standard_A = request.form['standard_A']
+    ethnicity_A = request.form.getlist('ethnicity_A')
+    
+    if request.form.get("appliable_B"):
+        appliable_B = request.form['appliable_B']
+        standard_B = request.form['standard_B']
+    if request.form.get("appliable_C"):
+        appliable_C = request.form['appliable_C']
+        ethnicity_B = request.form.getlist('ethnicity_B')
+    
+    
+    return render_template("subject_trend_graph.html", start_year =start_year,
+                        end_year = end_year, subject = subject,
+                        standard_A = standard_A, standard_B = standard_B,
+                        ethnicity_A = ethnicity_A, ethnicity_B = ethnicity_B,
+                        appliable_B = appliable_B, appliable_C = appliable_C
+                        )
 
 digital_course = ["9DGT","9ELT","10DGT","10ELT","11DTE","11DTG","11DTT","11DTP",
                 "11PCE","12DTE","12DTG","12DTM","12DTP","12PCE","13PCE","13DTE",

@@ -8,11 +8,11 @@
 
 {% block content %}
 <!--The first box for filtering-->
-{{start_year}}
+{{session['start_year']}}
 <br>
-{{end_year}}
+{{session['end_year']}}
 <br>
-{{subject}}
+{{session['subject']}}
 
 
 <form action="/subject_trend_graph", method="post" class="home_container">
@@ -23,43 +23,125 @@
 
             <div style="width:100%; display:flex; justify-content:space-between;">
                 <!--Second drop down-->
-                <div style="width: 35%; display:flex;  flex-direction: column; align-items: center;">
+                <div style="width: 45%; display:flex;  flex-direction: column; align-items: center;">
                     <label>Standard - Curve A</label>
-                    <select name="start_year">
-                        <option value="2021">2021 - (default)</option>
-                        <option value="2020">2020</option>
-                        <option value="2019">2019</option>
-                        <option value="2018">2018</option>
-                        <option value="2017">2017</option>
-                        <option value="2016">2016</option>
+                    <select name="standard_A">
+                        <option value="9DGT01">9DGT01 - (default)</option>
+                        <option value="9DGT02">9DGT02</option>
+                        <option value="9DGT03">9DGT03</option>
+                        <option value="9DGT04">9DGT04</option>
+                        <option value="9DGT14">9DGT14</option>
+                        <option value="9DGT15">9DGT15</option>
+                        <option value="LBY9EY22">LBY9EY22</option>
+                        
+                        <option value="10DGT02">10DGT02</option>
+                        <option value="10DGT04">10DGT04</option>
+                        <option value="10DGT05">10DGT05</option>
+                        <option value="10DGT06">10DGT06</option>
+                        <option value="10DGT09">10DGT09</option>
+                        <option value="10DGT13">10DGT13</option>
+                        <option value="10DGT14">10DGT14</option>
+                        <option value="10DGT15">10DGT15</option>
+                        <option value="10DGT16">10DGT16</option>
+                        <option value="10DGT17">10DGT17</option>
+                        <option value="10DGT18">10DGT18</option>
+                        
+                        <option value="A_91883_1">A_91883_1</option>
+                        <option value="A_91883_1">A_91883_1</option>
+                        <option value="A_91883_1">A_91883_1</option>
+                        <option value="A_91883_1">A_91883_1</option>
                     </select>
                 </div>
                 
 
-                <div style="width: 35%; display:flex; flex-direction: column; align-items: center;">
-                    <label>Standard - Curve B</label>
-                    <select name="end_year">
-                        <option value="2022">2022 - (default)</option>
-                        <option value="2021">2021</option>
-                        <option value="2020">2020</option>
-                        <option value="2019">2019</option>
-                        <option value="2018">2018</option>
-                        <option value="2017">2017</option>
-                        <option value="2016">2016</option>
+                <div style="width: 45%; display:flex; flex-direction: column; align-items: center;">
+                    <label>Standard - Curve B <input type="checkbox" name="appliable_B" value="appliable" default = 'nothing'></label>
+                    <select name="standard_B">
+                        <option value="9DGT01">9DGT01 - (default)</option>
+                        <option value="9DGT02">9DGT02</option>
+                        <option value="9DGT03">9DGT03</option>
+                        <option value="9DGT04">9DGT04</option>
+                        <option value="9DGT14">9DGT14</option>
+                        <option value="9DGT15">9DGT15</option>
+                        <option value="LBY9EY22">LBY9EY22</option>
+                        
+                        <option value="10DGT02">10DGT02</option>
+                        <option value="10DGT04">10DGT04</option>
+                        <option value="10DGT05">10DGT05</option>
+                        <option value="10DGT06">10DGT06</option>
+                        <option value="10DGT09">10DGT09</option>
+                        <option value="10DGT13">10DGT13</option>
+                        <option value="10DGT14">10DGT14</option>
+                        <option value="10DGT15">10DGT15</option>
+                        <option value="10DGT16">10DGT16</option>
+                        <option value="10DGT17">10DGT17</option>
+                        <option value="10DGT18">10DGT18</option>
+                        
+                        <option value="A_91883_1">A_91883_1</option>
+                        <option value="A_91883_1">A_91883_1</option>
+                        <option value="A_91883_1">A_91883_1</option>
+                        <option value="A_91883_1">A_91883_1</option>
                     </select>
                 </div>
-                
             </div>
-        
-            <!--Third drop down-->
-            <label>Subject</label>
-            <select name="subject">
-                <option value="9DGT">9DGT - (default)</option>
-                <option value="10DGT">10DGT</option>
-                <option value="11DTP">11DTP</option>
-                <option value="12DTP">12DTP</option>
-                <option value="13DTP">13DTP</option>
-            </select>
+            <!--The first space-between flex box ends here-->
+
+            <div style="width:100%; display:flex; justify-content:space-between;">
+                <div style="width: 45%; display:flex; flex-direction: column; align-items: center;">
+                    <br>
+                    <label style= "background-color: rgb(220, 172, 39);">Curve 1 Ethnicity Category</label>
+                    <details class="simple-dropdown" style="width:90%">
+                        <summary>Select Ethnicities - Curve A</summary>
+                        <select name="ethnicity_A" multiple class="unfolded-select" style="width:100%">
+                            <option value="all">All - (default)</option>
+                            <option value="NZ European">NZ European</option>
+                            <option value="Maori">Maori</option>
+                            <option value="African">African</option>
+                            <option value="American">American</option>
+                            <option value="Australian">Australian</option>
+                            <option value="British">British</option>
+                            <option value="Chinese">Chinese</option>
+                            <option value="French">French</option>
+                            <option value="German">German</option>
+                            <option value="Indian">Indian</option>
+                            <option value="Italian">Italian</option>
+                            <option value="Japanese">Japanese</option>
+                            <option value="Korean">Korean</option>
+                            <option value="Russian">Russian</option>
+                            <option value="Samoan">Samoan</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </details>
+                </div>
+                
+                <div style="width: 45%; display:flex; flex-direction: column; align-items: center;">
+                    <br>
+                    <label style= "background-color: rgb(220, 172, 39);">Curve B Ethnicity Category</label>
+                    <details class="simple-dropdown" style="width:90%">
+                        <summary>Select Ethnicities - Curve B <input type="checkbox" name="appliable_C" value="appliable" default = 'nothing'></summary>
+                        <select name="ethnicity_B" multiple class="unfolded-select" style="width:100%">
+                            <option value="all">All - (default)</option>
+                            <option value="NZ European">NZ European</option>
+                            <option value="Maori">Maori</option>
+                            <option value="African">African</option>
+                            <option value="American">American</option>
+                            <option value="Australian">Australian</option>
+                            <option value="British">British</option>
+                            <option value="Chinese">Chinese</option>
+                            <option value="French">French</option>
+                            <option value="German">German</option>
+                            <option value="Indian">Indian</option>
+                            <option value="Italian">Italian</option>
+                            <option value="Japanese">Japanese</option>
+                            <option value="Korean">Korean</option>
+                            <option value="Russian">Russian</option>
+                            <option value="Samoan">Samoan</option>
+                            <option value="Others">Others</option>
+                        </select>
+                    </details>
+                </div> 
+            </div>
+            <!--The second space-between flex box ends here-->
             <br>
             <div><input type="submit" value="Next Step"></div>
         </div>
