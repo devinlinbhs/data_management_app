@@ -100,9 +100,31 @@ input[type=checkbox] {
     height: 80%;
 }
 
+.simple-dropdown {
+    width: 200px; /* Set a fixed width or adjust as needed */
+}
+
+.simple-dropdown summary {
+    padding: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
 
 
+table {
+    border-collapse: collapse;
+    width: 100%;
+}
 
+td, th {
+    border: 1px solid #151212;
+    text-align: left;
+    padding: 8px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
 
 
 

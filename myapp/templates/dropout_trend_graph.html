@@ -23,26 +23,59 @@
 
     let continueRate_A = JSON.parse('{{ continue_rate_A|tojson }}');
     let continueRate_B = JSON.parse('{{ continue_rate_B|tojson }}');
-    let group_A = JSON.parse('{{ group_A|tojson }}');
-    let group_B = JSON.parse('{{ group_B|tojson }}');
-    let curve_A = JSON.parse('{{ appliable_A|tojson }}');
+    let continueRate_C = JSON.parse('{{ continue_rate_C|tojson }}');
+    
+
+    let group = JSON.parse('{{ group|tojson }}');
+    let labels = JSON.parse('{{ labels|tojson }}');
+    let start_year = JSON.parse('{{ start_year|tojson }}');
+
     let curve_B = JSON.parse('{{ appliable_B|tojson }}');
+    let curve_C = JSON.parse('{{ appliable_C|tojson }}');
+
+    let title;
+    
+    if (group =='continue'){
+        title = 'Continue Rate Trend Graph'}
+    else{
+        title = 'Dropout Rate Trend Graph'};
 
     let datasets = [];
-    if (curve_A){
-        if (group_A =='continous'){
+    if (group =='continue'){
+        datasets.push({
+                        label: 'Continue Rate Percentage -- Curve 1',
+                        data: continueRate_A,
+                        borderWidth: 3,
+                        hoverBorderWidth:5,
+                        hoverBorderColor: '#238fb6'
+                    })
+                }
+    else{
+        let dropoutRates_A = continueRate_A.map((value) => 100 - value);
+        datasets.push({
+                        label: 'Dropout Rate Percentage -- Curve 1',
+                        data: dropoutRates_A,
+                        borderWidth: 3,
+                        hoverBorderWidth:5,
+                        hoverBorderColor: '#238fb6'
+                    })
+        };
+
+    if (curve_B){
+        if (group =='continue'){
             datasets.push({
-                            label: 'Continue Rate Percentage -- Course 1',
-                            data: [continueRate_A, 12, 3],
+                            label: 'Continue Rate Percentage -- Curve 2',
+                            data: continueRate_B,
                             borderWidth: 3,
                             hoverBorderWidth:5,
                             hoverBorderColor: '#238fb6'
                         })
                     }
         else{
+            let dropoutRates_B = continueRate_B.map((value) => 100 - value);
             datasets.push({
-                            label: 'Dropout Rate Percentage -- Course 1',
-                            data: [(100-continueRate_A), 12, 3],
+                            label: 'Dropout Rate Percentage -- Curve 2',
+                            data: dropoutRates_B,
                             borderWidth: 3,
                             hoverBorderWidth:5,
                             hoverBorderColor: '#238fb6'
@@ -51,19 +84,20 @@
     };
 
 
-    if (curve_B){
-        if (group_B =='continous'){
+    if (curve_C){
+        if (group =='continue'){
             datasets.push({
-                            label: 'Continue Rate Percentage -- Course 2',
-                            data: [continueRate_B, 42, 9],
+                            label: 'Continue Rate Percentage -- Curve 3',
+                            data: continueRate_C,
                             borderWidth: 3,
                             hoverBorderWidth:5,
                         })
                     }
         else{
+            let dropoutRates_C = continueRate_C.map((value) => 100 - value);
             datasets.push({
-                            label: 'Dropout Rate Percentage -- Course 2',
-                            data: [(100-continueRate_B), 42, 9],
+                            label: 'Dropout Rate Percentage -- Curve 3',
+                            data: dropoutRates_C,
                             borderWidth: 3,
                             hoverBorderWidth:5,
                         })
@@ -73,6 +107,8 @@
 
     let testingGraph = new Chart(graph, 
     {type: 'line',
+    data: {labels: labels,
+        datasets: datasets},
     options: {
         //intersection with mode index can give labels for both point at the same time//
         interaction: {
@@ -83,7 +119,7 @@
         plugins: {
             title: {
                 display: true,
-                text: 'Drop Out Trend Graph',
+                text: title,
                 font: {
                     size: 30
                 }
@@ -97,19 +133,64 @@
             }
         },
         scales:{
+                x:{
+                    ticks:{
+                        callback: function (value){
+                            return value + start_year;// Extract the year part from the label and return it
+                            },
+                        }
+                    },
                 y:{
                     ticks:{
                         callback: function (value){
                             return value + '%'; // Add the percentage symbol to the labels
                             },
-                        }
+                        },
+                        suggestedMin: 0, // minimum 0%
+                        suggestedMax: 100 // maximum 100%
                     }
+                    
                 }
     },
 
-    data: {labels: [ '2021', '2022', '2023'],
-            datasets: datasets}
+    
     });
     </script>
 {{continue_rate_A}}
+<br>
+{{ethnicity_A}}
+{{ethnicity_B}}
+{{ethnicity_C}}
+<br>
+{{end_student_list_A}}
+{{end_student_list_B}}
+{{end_student_list_C}}
+
+<br>
+<h2>All student who took {{start_course}} and their status on {{end_course}}</h2>
+<table>
+    <tbody>
+        <thead>
+            <tr>
+                <th>Year when taken {{start_course}}</th>
+                <th>Status for {{end_course}} (dropped out/continued)</th>
+                <th>Name</th>
+                <th>Gender</th>
+                <th>Ethnicity</th>
+                <th>Attendance</th>
+            </tr>
+        </thead>
+        <!--Putting 3 columns at the top to begin-->
+        <tr>
+            <td>none</td>
+            <td>none</td>
+            <td>none</td>
+            <td>none</td>
+            <td>none</td>
+            <td>none</td>
+        </tr>
+    </tbody>
+</table>
+
+
 {% endblock %}
