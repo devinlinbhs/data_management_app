@@ -10,7 +10,7 @@
 <!--The first box for filtering-->
 
 <form action="/dropout_trend_graph", method="post" class="home_container">
-    <div class="home_container_johnny">
+    <div style="background-color: white; margin-top: 5.5vh; width:80%;">
         <div style="margin-left: 10%;">
         <h2>Filters</h2>
         
@@ -113,9 +113,6 @@
                     <option value="Others">Others</option>
                 </select>
             </details> 
-            <br>
-            <br>
-
             <h2>Curve 2 if appliable<input type="checkbox" name="appliable_B" value="appliable" default = 'nothing'></h2>
             <label style= "background-color: rgb(220, 172, 39);">Curve 2 Ethnicity Category</label>
             <br>
@@ -168,9 +165,8 @@
                 </select>
             </details>
         </div>
-
+        <div style="width: 35%; margin-right: 5%; margin-left: 10%;"><input type="submit" value="Submit"></div>
     </div>
-    <div style="width: 35%; margin-right: 5%; margin-left: 10%;"><input type="submit" value="Submit"></div>
     <!--Data can be retreated in {route.py} by {request.form['name']}-->
 </form>
 

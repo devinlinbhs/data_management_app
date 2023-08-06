@@ -156,17 +156,10 @@
     
     });
     </script>
-{{continue_rate_A}}
-<br>
-{{ethnicity_A}}
-{{ethnicity_B}}
-{{ethnicity_C}}
-<br>
-{{end_student_list_A}}
-{{end_student_list_B}}
-{{end_student_list_C}}
 
-<br>
+
+
+
 <h2>All student who took {{start_course}} and their status on {{end_course}}</h2>
 <table>
     <tbody>
@@ -181,14 +174,31 @@
             </tr>
         </thead>
         <!--Putting 3 columns at the top to begin-->
+
+        {% for student in student_of_interest_result %}
         <tr>
-            <td>none</td>
-            <td>none</td>
-            <td>none</td>
-            <td>none</td>
-            <td>none</td>
-            <td>none</td>
+            <td>{{student_of_interest_year[loop.index -1]}}</td>
+            <td>Dropped out</td>
+            <!-- {{student_of_interest_result}} is a list of sqlalchemy results -->
+            <td>{{student_of_interest_result[loop.index -1].name}}</td>
+            <td>{{student_of_interest_result[loop.index -1].gender}}</td>
+            <td>{{student_of_interest_result[loop.index -1].ethnicity}}</td>
+            <td>{{student_of_interest_result[loop.index -1].attendance}}</td>
         </tr>
+        {% endfor %}
+
+        {% for student in student_not_interest_result %}
+        <tr>
+            <td>{{student_of_interest_year[loop.index -1]}}</td>
+            <td>Continued</td>
+            <td>{{student_not_interest_result[loop.index -1].name}}</td>
+            <td>{{student_not_interest_result[loop.index -1].gender}}</td>
+            <td>{{student_not_interest_result[loop.index -1].ethnicity}}</td>
+            <td>{{student_not_interest_result[loop.index -1].attendance}}</td>
+        </tr>
+        {% endfor %}
+
+
     </tbody>
 </table>
 

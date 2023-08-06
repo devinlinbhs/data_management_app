@@ -1,0 +1,70 @@
+{% extends 'base.html' %}
+
+
+{% block title %}
+<title>Subject Trend Filter</title>
+{% endblock %}
+
+
+{% block content %}
+<!--The first box for filtering-->
+{{start_year}}
+<br>
+{{end_year}}
+<br>
+{{subject}}
+
+
+<form action="/subject_trend_graph", method="post" class="home_container">
+    <div style="background-color: white; margin-top: 5.5vh; width:80%;">
+        <div style="width:100%; display:flex; flex-direction: column; align-items: center;">
+            <h2>Filters</h2>
+        
+
+            <div style="width:100%; display:flex; justify-content:space-between;">
+                <!--Second drop down-->
+                <div style="width: 35%; display:flex;  flex-direction: column; align-items: center;">
+                    <label>Standard - Curve A</label>
+                    <select name="start_year">
+                        <option value="2021">2021 - (default)</option>
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                    </select>
+                </div>
+                
+
+                <div style="width: 35%; display:flex; flex-direction: column; align-items: center;">
+                    <label>Standard - Curve B</label>
+                    <select name="end_year">
+                        <option value="2022">2022 - (default)</option>
+                        <option value="2021">2021</option>
+                        <option value="2020">2020</option>
+                        <option value="2019">2019</option>
+                        <option value="2018">2018</option>
+                        <option value="2017">2017</option>
+                        <option value="2016">2016</option>
+                    </select>
+                </div>
+                
+            </div>
+        
+            <!--Third drop down-->
+            <label>Subject</label>
+            <select name="subject">
+                <option value="9DGT">9DGT - (default)</option>
+                <option value="10DGT">10DGT</option>
+                <option value="11DTP">11DTP</option>
+                <option value="12DTP">12DTP</option>
+                <option value="13DTP">13DTP</option>
+            </select>
+            <br>
+            <div><input type="submit" value="Next Step"></div>
+        </div>
+        
+    </div>
+    <!--Data can be retreated in {route.py} by {request.form['name']}-->
+</form>
+{% endblock %}
