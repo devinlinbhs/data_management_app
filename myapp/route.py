@@ -35,6 +35,8 @@ def option():
     # Should have the boxes of pictures of which filter to use
     return render_template("option.html")
 
+
+
 @app.route("/subject_trend_filter1")
 def subject_trend_filter1():
     # Get the primary filters -- Year of Start and Year of Ending, Subject
@@ -88,6 +90,37 @@ def get_trend_result(start_year, end_year, standard, ethnicities):
         
     return candidate_id_list, candidate_grade_list, candidate_year_list
 
+E_grade = ['Excellent', 'Excellence', 'Excelling', 'Highly Competent', 'Very Good']
+M_grade = ['Achieving Well', 'Merit', 'Good']
+A_grade = ['Competent', 'Achieving']
+D_grade = ['Developing Skill', 'Variable']
+N_grade = ['Not Achieved', 'Experiencing Difficulty']
+
+def process_grade_year(candidate_id_list, candidate_grade_list, candidate_year_list):
+    # Get all the grades and put them into different groups
+    
+    Excellence = []
+    Merit = []
+    Achieve = []
+    Develop = []
+    Not_Achieve = []
+    
+    i = 0
+    for result in candidate_grade_list:
+        if result in E_grade:
+            Excellence.append(['E', candidate_year_list[i], candidate_id_list[i]])
+        elif result in M_grade:
+            Merit.append(['M', candidate_year_list[i], candidate_id_list[i]])
+        elif result in A_grade:
+            Achieve.append(['A', candidate_year_list[i], candidate_id_list[i]])
+        else:
+            if result in D_grade:
+                Develop.append(['D', candidate_year_list[i], candidate_id_list[i]])
+            Not_Achieve.append(['NA', candidate_year_list[i], candidate_id_list[i]])
+            
+    return Excellence, Merit, Achieve, Develop, Not_Achieve
+
+
 @app.route("/subject_trend_graph", methods = ["GET","POST"])
 def subject_trend_graph():
     # Using the information from both filters to display the bar graph
@@ -107,19 +140,24 @@ def subject_trend_graph():
     # Got lists of student_id, grades, and the year they belong to
     # Pass this grade through the HTML, display it in Chart.JS using different stacking
     
+    Excellence_A, Merit_A, Achieve_A, Develop_A, Not_Achieve_A = process_grade_year(candidate_id_list_A, candidate_grade_list_A, candidate_year_list_A)
+
     standard_B = None
     ethnicity_B = None
     candidate_id_list_B = None
     candidate_grade_list_B = None
     candidate_year_list_B = None
+    
+    Excellence_B, Merit_B, Achieve_B, Develop_B, Not_Achieve_B = None, None, None, None, None
+    
     if request.form.get("appliable_B"):
         standard_B = request.form['standard_B']
         ethnicity_B = request.form.getlist('ethnicity_B')
         standard_B = models.Standard.query.filter(models.Standard.name == (standard_B)).all()[0].id
         candidate_id_list_B, candidate_grade_list_B, candidate_year_list_B = get_trend_result(start_year, end_year, standard_B, ethnicity_B)
-    
-    
-    
+        
+        Excellence_B, Merit_B, Achieve_B, Develop_B, Not_Achieve_B = process_grade_year(candidate_id_list_B, candidate_grade_list_B, candidate_year_list_B)
+    # Same thing is done to curve B
     
     
     return render_template("subject_trend_graph.html", start_year =start_year,
@@ -134,7 +172,19 @@ def subject_trend_graph():
                         
                         candidate_id_list_B = candidate_id_list_B,
                         candidate_grade_list_B = candidate_grade_list_B,
-                        candidate_year_list_B = candidate_year_list_B
+                        candidate_year_list_B = candidate_year_list_B,
+                        
+                        Excellence_A = Excellence_A, 
+                        Merit_A = Merit_A, 
+                        Achieve_A = Achieve_A,
+                        Develop_A = Develop_A, 
+                        Not_Achieve_A = Not_Achieve_A,
+                        
+                        Excellence_B = Excellence_B, 
+                        Merit_B = Merit_B, 
+                        Achieve_B = Achieve_B,
+                        Develop_B = Develop_B, 
+                        Not_Achieve_B = Not_Achieve_B,
                         )
 
 

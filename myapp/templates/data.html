@@ -20,39 +20,43 @@
     let testingGraph = new Chart(graph, 
     {type: 'bar',
     data: {labels: [ '2021', '2022', '2023'],
-            datasets: [{label: 'Assessment1 - E',
-                        data: [15, 12, 23],
-                        borderWidth: 1,
-                        hoverBorderWidth:3,
-                        hoverBorderColor: '#238fb6',
-                        backgroundColor: '#ffcc33',
-                        stack: 'Assessment - 1'
-                        },
-
-                        {label: 'Assessment1 - M',
-                        data: [ 14, 32, 23],
-                        borderWidth: 1,
-                        hoverBorderWidth:3,
-                        hoverBorderColor: '#238fb6',
-                        backgroundColor: '#5699d5',
-                        stack: 'Assessment - 1'
-                        },
-
-                        {label: 'Assessment1 - A',
-                        data: [ 43, 15, 19],
-                        borderWidth: 1,
-                        hoverBorderWidth:3,
-                        hoverBorderColor: '#238fb6',
-                        backgroundColor: '#16a646',
-                        stack: 'Assessment - 1'},
-
-                        {label: 'Assessment1 - NA',
-                        data: [ 23, 15, 19],
-                        borderWidth: 1,
-                        hoverBorderWidth:3,
-                        hoverBorderColor: '#238fb6',
-                        backgroundColor: '#ff5a57',
-                        stack: 'Assessment - 1'},
+            datasets: [// Assessment 2 Stack
+                {
+                    label: 'Assessment1 - E',
+                    data: [25, 12, 31],
+                    borderWidth: 1,
+                    hoverBorderWidth: 3,
+                    hoverBorderColor: '#238fb6',
+                    backgroundColor: '#ffd966',
+                    stack: 'Assessment - 1'
+                },
+                {
+                    label: 'Assessment1 - M',
+                    data: [10, 32, 23],
+                    borderWidth: 1,
+                    hoverBorderWidth: 3,
+                    hoverBorderColor: '#238fb6',
+                    backgroundColor: '#6d9eeb',
+                    stack: 'Assessment - 1'
+                },
+                {
+                    label: 'Assessment1 - A',
+                    data: [43, 15, 19],
+                    borderWidth: 1,
+                    hoverBorderWidth: 3,
+                    hoverBorderColor: '#238fb6',
+                    backgroundColor: '#5ca017', 
+                    stack: 'Assessment - 1'
+                },
+                {
+                    label: 'Assessment1 - NA',
+                    data: [21, 31, 13],
+                    borderWidth: 1,
+                    hoverBorderWidth: 3,
+                    hoverBorderColor: '#238fb6',
+                    backgroundColor: '#dc4c4c',
+                    stack: 'Assessment - 1'
+                },
 
 
                         {label: 'Assessment2 - E',
@@ -68,7 +72,7 @@
                         borderWidth: 1,
                         hoverBorderWidth:3,
                         hoverBorderColor: '#238fb6',
-                        backgroundColor: '#0079e2',
+                        backgroundColor: '#3c78d8',
                         stack: 'Assessment - 2'
                         },
 
@@ -77,7 +81,7 @@
                         borderWidth: 1,
                         hoverBorderWidth:3,
                         hoverBorderColor: '#238fb6',
-                        backgroundColor: '#0a850a',
+                        backgroundColor: '#38761d',
                         stack: 'Assessment - 2'},
 
                         {label: 'Assessment2 - NA',
@@ -85,7 +89,7 @@
                         borderWidth: 1,
                         hoverBorderWidth:3,
                         hoverBorderColor: '#238fb6',
-                        backgroundColor: '#dc1b1b',
+                        backgroundColor: '#cc0000',
                         stack: 'Assessment - 2'}
                         
                     ],},
