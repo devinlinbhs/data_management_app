@@ -20,11 +20,11 @@ class Standard(db.Model):
     __tablename__ = "Standard"
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.Text())
-    standard_year_level = db.Column(db.Integer())
+    year_level = db.Column(db.Integer())
     assessment_type = db.Column(db.Text())
     standard_code = db.Column(db.Integer())
-    credit = db.Column(db.Integer())
-    version = db.Column(db.Integer())
+    course = db.Column(db.Text())
+    standard_type = db.Column(db.Text())
 
     
     

@@ -15,45 +15,120 @@
     <script>
 
     let graph = document.getElementById('dropOutGraph').getContext('2d');
-    
     Chart.defaults.font.size = 16;
+
     let testingGraph = new Chart(graph, 
     {type: 'bar',
+    data: {labels: [ '2021', '2022', '2023'],
+            datasets: [{label: 'Assessment1 - E',
+                        data: [15, 12, 23],
+                        borderWidth: 1,
+                        hoverBorderWidth:3,
+                        hoverBorderColor: '#238fb6',
+                        backgroundColor: '#ffcc33',
+                        stack: 'Assessment - 1'
+                        },
+
+                        {label: 'Assessment1 - M',
+                        data: [ 14, 32, 23],
+                        borderWidth: 1,
+                        hoverBorderWidth:3,
+                        hoverBorderColor: '#238fb6',
+                        backgroundColor: '#5699d5',
+                        stack: 'Assessment - 1'
+                        },
+
+                        {label: 'Assessment1 - A',
+                        data: [ 43, 15, 19],
+                        borderWidth: 1,
+                        hoverBorderWidth:3,
+                        hoverBorderColor: '#238fb6',
+                        backgroundColor: '#16a646',
+                        stack: 'Assessment - 1'},
+
+                        {label: 'Assessment1 - NA',
+                        data: [ 23, 15, 19],
+                        borderWidth: 1,
+                        hoverBorderWidth:3,
+                        hoverBorderColor: '#238fb6',
+                        backgroundColor: '#ff5a57',
+                        stack: 'Assessment - 1'},
+
+
+                        {label: 'Assessment2 - E',
+                        data: [ 25, 12, 31],
+                        borderWidth: 1,
+                        hoverBorderWidth:3,
+                        hoverBorderColor: '#238fb6',
+                        backgroundColor: '#f49717',
+                        stack: 'Assessment - 2'
+                        },
+                        {label: 'Assessment2 - M',
+                        data: [ 10, 32, 23],
+                        borderWidth: 1,
+                        hoverBorderWidth:3,
+                        hoverBorderColor: '#238fb6',
+                        backgroundColor: '#0079e2',
+                        stack: 'Assessment - 2'
+                        },
+
+                        {label: 'Assessment2 - A',
+                        data: [ 43, 15, 19],
+                        borderWidth: 1,
+                        hoverBorderWidth:3,
+                        hoverBorderColor: '#238fb6',
+                        backgroundColor: '#0a850a',
+                        stack: 'Assessment - 2'},
+
+                        {label: 'Assessment2 - NA',
+                        data: [ 21, 31, 13],
+                        borderWidth: 1,
+                        hoverBorderWidth:3,
+                        hoverBorderColor: '#238fb6',
+                        backgroundColor: '#dc1b1b',
+                        stack: 'Assessment - 2'}
+                        
+                    ],},
     options: {
         //intersection with mode index can give labels for both point at the same time//
-        interaction: {
-            mode: 'index',
-            intersect: false,
-        },
+
         plugins: {
             title: {
                 display: true,
-                text: 'Drop Out Trend Graph',
+                text: 'title',
                 font: {
                     size: 30
                 }
             },
             legend:{
-                position: 'right'
+                labels:{
+                    font:{
+                        size:10
+                    }
+                },
             }
         },
-    },
-
-        
-    data: {labels: [ '2021', '2022', '2023'],
-            datasets: [{label: 'Drop Out Percentage -- Course 1',
-                        data: [ 5, 12, 3],
-                        borderWidth: 3,
-                        hoverBorderWidth:5,
-                        hoverBorderColor: '#238fb6'},
-
-                        {label: 'Drop Out Percentage -- Course 2',
-                        data: [ 43, 5, 19],
-                        borderWidth: 3,
-                        hoverBorderWidth:5,}],
-
-    }}
-    );
+        scales:{
+            x:{
+                ticks:{
+                    callback: function (value){
+                        return value+ 2018;// Extract the year part from the label and return it
+                        },
+                        stacked: true,
+                    }
+                },
+            y:{
+                ticks:{
+                    callback: function (value){
+                        return value + '%'; // Add the percentage symbol to the labels
+                        },
+                    },
+                    suggestedMin: 0, // minimum 0%
+                    suggestedMax: 100 // maximum 100%
+                }
+            }
+    }
+    });
 
     </script>
 

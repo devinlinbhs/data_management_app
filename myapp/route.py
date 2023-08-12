@@ -18,6 +18,10 @@ app.secret_key ="aswzdexfrcgtvnijklomjnihbgvftdrsewazdx"
 import myapp.models as models
 # Allowing SQLAlchemy to be used
 
+common_ethnicities = ["NZ European", "Maori", "African", "American", "Australian",
+                        "British", "Chinese","French","German", "Indian","Italian", "Japanese",
+                        "Korean","Russian","Samoan"]
+
 @app.route("/")
 def home():
     
@@ -41,39 +45,100 @@ def subject_trend_filter2():
     # Get the secondary filters -- Standard and Ethnicity
     session['start_year'] = request.form['start_year']
     session['end_year'] = request.form['end_year']
-    session['subject'] = request.form['subject']
+    session['course'] = request.form['course']
     
+    course_list_result = models.Standard.query.filter(models.Standard.course == (session['course'])).all()
+    # Get the information about the chosen course
+    session['course_list'] = []
+    for result in course_list_result:
+        session['course_list'].append(result.name)
+    
+    session['course_list'].sort()
     return render_template("subject_trend_filter2.html")
 
+
+def get_trend_result(start_year, end_year, standard, ethnicities):
+    # This is a helper function for the {subject_trend_graph}
+    
+    # Get standard and ethnicities from {subject_trend_graph}, returning
+    # candidate_id_list, candidate_grade_list, candidate_year_list
+    candidate_id_list = []
+    candidate_grade_list = []
+    candidate_year_list = []
+    for year in range(start_year, end_year+1):
+        if len(ethnicities) == 0 or 'all' in ethnicities:
+                result_A = models.Result.query.filter(
+                            and_(models.Result.standard_id == (standard), 
+                                models.Result.data_year == year)).all()
+        else:
+            for ethnicity in ethnicities:
+                if ethnicity == 'Others':
+                    result_A = models.Result.query.join(models.Candidate).filter(
+                                    and_(models.Candidate.ethnicity.notin_(common_ethnicities), models.Result.standard_id == (standard),
+                                        models.Result.data_year == year)).all()
+            else:
+                    result_A = models.Result.query.join(models.Candidate).filter(
+                                    and_(models.Candidate.ethnicity == ethnicity, models.Result.standard_id == (standard),
+                                        models.Result.data_year == year)).all()
+        
+        for result in result_A:
+            candidate_id_list.append(result.candidate_id)
+            candidate_grade_list.append(result.grade)
+            candidate_year_list.append(result.data_year)
+        
+    return candidate_id_list, candidate_grade_list, candidate_year_list
 
 @app.route("/subject_trend_graph", methods = ["GET","POST"])
 def subject_trend_graph():
     # Using the information from both filters to display the bar graph
-    start_year = session['start_year']
-    end_year = session['end_year']
+    start_year = int(session['start_year'])
+    end_year = int(session['end_year'])
     subject = session['subject']
     
-    appliable_B, appliable_C = None, None
-    standard_B = None
-    ethnicity_B = None
     
+    
+    # The current idea is, I have the user {{standard_A}} and {{standard_B}}, extract the standard_id of these from 
+    # the data base table "standard"
+    # Then select the {id} from result where standard_id = ?
     standard_A = request.form['standard_A']
     ethnicity_A = request.form.getlist('ethnicity_A')
+    standard_A = models.Standard.query.filter(models.Standard.name == (standard_A)).all()[0].id
+    candidate_id_list_A, candidate_grade_list_A, candidate_year_list_A = get_trend_result(start_year, end_year, standard_A, ethnicity_A)
+    # Got lists of student_id, grades, and the year they belong to
+    # Pass this grade through the HTML, display it in Chart.JS using different stacking
     
+    standard_B = None
+    ethnicity_B = None
+    candidate_id_list_B = None
+    candidate_grade_list_B = None
+    candidate_year_list_B = None
     if request.form.get("appliable_B"):
-        appliable_B = request.form['appliable_B']
         standard_B = request.form['standard_B']
-    if request.form.get("appliable_C"):
-        appliable_C = request.form['appliable_C']
         ethnicity_B = request.form.getlist('ethnicity_B')
+        standard_B = models.Standard.query.filter(models.Standard.name == (standard_B)).all()[0].id
+        candidate_id_list_B, candidate_grade_list_B, candidate_year_list_B = get_trend_result(start_year, end_year, standard_B, ethnicity_B)
+    
+    
+    
     
     
     return render_template("subject_trend_graph.html", start_year =start_year,
                         end_year = end_year, subject = subject,
+                        
                         standard_A = standard_A, standard_B = standard_B,
                         ethnicity_A = ethnicity_A, ethnicity_B = ethnicity_B,
-                        appliable_B = appliable_B, appliable_C = appliable_C
+                        
+                        candidate_id_list_A = candidate_id_list_A,
+                        candidate_grade_list_A = candidate_grade_list_A,
+                        candidate_year_list_A = candidate_year_list_A,
+                        
+                        candidate_id_list_B = candidate_id_list_B,
+                        candidate_grade_list_B = candidate_grade_list_B,
+                        candidate_year_list_B = candidate_year_list_B
                         )
+
+
+
 
 digital_course = ["9DGT","9ELT","10DGT","10ELT","11DTE","11DTG","11DTT","11DTP",
                 "11PCE","12DTE","12DTG","12DTM","12DTP","12PCE","13PCE","13DTE",
@@ -161,9 +226,7 @@ def time_taken(start_course, end_course):
 
 def get_continue_rate(start_course, end_course, start_year, end_year, ethnicities, all_start_student_list, all_end_student_list):
     """helper function which returns the continue rate given by a start course and an end course"""
-    common_ethnicities = ["NZ European", "Maori", "African", "American", "Australian",
-                        "British", "Chinese","French","German", "Indian","Italian", "Japanese",
-                        "Korean","Russian","Samoan"]
+    
     # A list of continue rate from looping through start_year to end_year
     continue_rate = []
     year_addition = time_taken(start_course, end_course)

@@ -12,8 +12,9 @@
 <br>
 {{session['end_year']}}
 <br>
-{{session['subject']}}
-
+{{session['course']}}
+<br>
+{{session['course_list']}}
 
 <form action="/subject_trend_graph", method="post" class="home_container">
     <div style="background-color: white; margin-top: 5.5vh; width:80%;">
@@ -26,30 +27,9 @@
                 <div style="width: 45%; display:flex;  flex-direction: column; align-items: center;">
                     <label>Standard - Curve A</label>
                     <select name="standard_A">
-                        <option value="9DGT01">9DGT01 - (default)</option>
-                        <option value="9DGT02">9DGT02</option>
-                        <option value="9DGT03">9DGT03</option>
-                        <option value="9DGT04">9DGT04</option>
-                        <option value="9DGT14">9DGT14</option>
-                        <option value="9DGT15">9DGT15</option>
-                        <option value="LBY9EY22">LBY9EY22</option>
-                        
-                        <option value="10DGT02">10DGT02</option>
-                        <option value="10DGT04">10DGT04</option>
-                        <option value="10DGT05">10DGT05</option>
-                        <option value="10DGT06">10DGT06</option>
-                        <option value="10DGT09">10DGT09</option>
-                        <option value="10DGT13">10DGT13</option>
-                        <option value="10DGT14">10DGT14</option>
-                        <option value="10DGT15">10DGT15</option>
-                        <option value="10DGT16">10DGT16</option>
-                        <option value="10DGT17">10DGT17</option>
-                        <option value="10DGT18">10DGT18</option>
-                        
-                        <option value="A_91883_1">A_91883_1</option>
-                        <option value="A_91883_1">A_91883_1</option>
-                        <option value="A_91883_1">A_91883_1</option>
-                        <option value="A_91883_1">A_91883_1</option>
+                        {% for result in session['course_list'] %}
+                            <option value="{{result}}">{{result}}</option>
+                        {% endfor %}
                     </select>
                 </div>
                 
@@ -57,30 +37,9 @@
                 <div style="width: 45%; display:flex; flex-direction: column; align-items: center;">
                     <label>Standard - Curve B <input type="checkbox" name="appliable_B" value="appliable" default = 'nothing'></label>
                     <select name="standard_B">
-                        <option value="9DGT01">9DGT01 - (default)</option>
-                        <option value="9DGT02">9DGT02</option>
-                        <option value="9DGT03">9DGT03</option>
-                        <option value="9DGT04">9DGT04</option>
-                        <option value="9DGT14">9DGT14</option>
-                        <option value="9DGT15">9DGT15</option>
-                        <option value="LBY9EY22">LBY9EY22</option>
-                        
-                        <option value="10DGT02">10DGT02</option>
-                        <option value="10DGT04">10DGT04</option>
-                        <option value="10DGT05">10DGT05</option>
-                        <option value="10DGT06">10DGT06</option>
-                        <option value="10DGT09">10DGT09</option>
-                        <option value="10DGT13">10DGT13</option>
-                        <option value="10DGT14">10DGT14</option>
-                        <option value="10DGT15">10DGT15</option>
-                        <option value="10DGT16">10DGT16</option>
-                        <option value="10DGT17">10DGT17</option>
-                        <option value="10DGT18">10DGT18</option>
-                        
-                        <option value="A_91883_1">A_91883_1</option>
-                        <option value="A_91883_1">A_91883_1</option>
-                        <option value="A_91883_1">A_91883_1</option>
-                        <option value="A_91883_1">A_91883_1</option>
+                        {% for result in session['course_list'] %}
+                            <option value="{{result}}">{{result}}</option>
+                        {% endfor %}
                     </select>
                 </div>
             </div>
@@ -118,7 +77,7 @@
                     <br>
                     <label style= "background-color: rgb(220, 172, 39);">Curve B Ethnicity Category</label>
                     <details class="simple-dropdown" style="width:90%">
-                        <summary>Select Ethnicities - Curve B <input type="checkbox" name="appliable_C" value="appliable" default = 'nothing'></summary>
+                        <summary>Select Ethnicities - Curve B</summary>
                         <select name="ethnicity_B" multiple class="unfolded-select" style="width:100%">
                             <option value="all">All - (default)</option>
                             <option value="NZ European">NZ European</option>

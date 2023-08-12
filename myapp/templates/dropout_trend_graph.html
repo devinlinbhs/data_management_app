@@ -51,7 +51,7 @@
                     })
                 }
     else{
-        let dropoutRates_A = continueRate_A.map((value) => 100 - value);
+        let dropoutRates_A = continueRate_A.map((value) => (value !== null ? 100 - value : null));
         datasets.push({
                         label: 'Dropout Rate Percentage -- Curve 1',
                         data: dropoutRates_A,
@@ -72,7 +72,7 @@
                         })
                     }
         else{
-            let dropoutRates_B = continueRate_B.map((value) => 100 - value);
+            let dropoutRates_A = continueRate_A.map((value) => (value !== null ? 100 - value : null));
             datasets.push({
                             label: 'Dropout Rate Percentage -- Curve 2',
                             data: dropoutRates_B,
@@ -94,7 +94,7 @@
                         })
                     }
         else{
-            let dropoutRates_C = continueRate_C.map((value) => 100 - value);
+            let dropoutRates_A = continueRate_A.map((value) => (value !== null ? 100 - value : null));
             datasets.push({
                             label: 'Dropout Rate Percentage -- Curve 3',
                             data: dropoutRates_C,
