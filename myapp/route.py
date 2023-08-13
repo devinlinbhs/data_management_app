@@ -104,6 +104,7 @@ def process_grade_year(candidate_id_list, candidate_grade_list, candidate_year_l
     Achieve = []
     Develop = []
     Not_Achieve = []
+    number_student_dict = {}
     
     i = 0
     for result in candidate_grade_list:
@@ -118,7 +119,67 @@ def process_grade_year(candidate_id_list, candidate_grade_list, candidate_year_l
                 Develop.append(['D', candidate_year_list[i], candidate_id_list[i]])
             Not_Achieve.append(['NA', candidate_year_list[i], candidate_id_list[i]])
             
-    return Excellence, Merit, Achieve, Develop, Not_Achieve
+        if number_student_dict.get(candidate_year_list[i], 0) == 0:
+            number_student_dict[candidate_year_list[i]] = 1
+        else:
+            number_student_dict[candidate_year_list[i]] += 1
+        i += 1
+            
+    return Excellence, Merit, Achieve, Develop, Not_Achieve, number_student_dict
+
+def get_grade_percentage(Excellence, Merit, Achieve, Not_Achieve, number_student_dict):
+    # Get a dictionary of number_student_dict, calculate the percentage of E, M, A, NA over many years
+    # This is for just 1 curve
+    # Return a list of percentages:
+    # [[E, E, E, E], [M, M, M, M] ...]
+    # [E, E, E, E] is actually like [93%, 36%, 32%, 71%] for 2016, 2017... for example
+    keys = list(number_student_dict.keys())
+    
+    grade_percentage = []
+    
+    E_list = []
+    M_list = []
+    A_list = []
+    NA_list = []
+    
+    for i in range( int(session['start_year']), int(session['end_year']) + 1):
+        
+        E = 0
+        M = 0
+        A = 0
+        NA = 0
+        
+        for j in range(len(Excellence)):
+            if Excellence[j][1] == i:
+                E += 1
+        for j in range(len(Merit)):
+            if Merit[j][1] == i:
+                M += 1
+        for j in range(len(Achieve)):
+            if Achieve[j][1] == i:
+                A += 1
+        for j in range(len(Not_Achieve)):
+            if Not_Achieve[j][1] == i:
+                NA += 1
+                
+        if i in keys:
+            value = number_student_dict[i]
+            E_list.append(round(E / value * 100, 1))
+            M_list.append(round(M / value * 100, 1))
+            A_list.append(round(A / value * 100, 1))
+            NA_list.append(round(NA/ value * 100, 1))
+        else:
+            E_list.append(round(0.0, 1))
+            M_list.append(round(0.0, 1))
+            A_list.append(round(0.0, 1))
+            NA_list.append(round(0.0, 1))
+        
+    grade_percentage.append(E_list)
+    grade_percentage.append(M_list)
+    grade_percentage.append(A_list)
+    grade_percentage.append(NA_list)
+    
+    return grade_percentage
 
 
 @app.route("/subject_trend_graph", methods = ["GET","POST"])
@@ -126,7 +187,7 @@ def subject_trend_graph():
     # Using the information from both filters to display the bar graph
     start_year = int(session['start_year'])
     end_year = int(session['end_year'])
-    subject = session['subject']
+    subject = session['course']
     
     
     
@@ -134,34 +195,58 @@ def subject_trend_graph():
     # the data base table "standard"
     # Then select the {id} from result where standard_id = ?
     standard_A = request.form['standard_A']
+    standard_A_name = standard_A
     ethnicity_A = request.form.getlist('ethnicity_A')
+    
     standard_A = models.Standard.query.filter(models.Standard.name == (standard_A)).all()[0].id
     candidate_id_list_A, candidate_grade_list_A, candidate_year_list_A = get_trend_result(start_year, end_year, standard_A, ethnicity_A)
     # Got lists of student_id, grades, and the year they belong to
     # Pass this grade through the HTML, display it in Chart.JS using different stacking
     
-    Excellence_A, Merit_A, Achieve_A, Develop_A, Not_Achieve_A = process_grade_year(candidate_id_list_A, candidate_grade_list_A, candidate_year_list_A)
-
+    Excellence_A, Merit_A, Achieve_A, Develop_A, Not_Achieve_A, number_student_dict_A = process_grade_year(candidate_id_list_A, candidate_grade_list_A, candidate_year_list_A)
+    grade_percentage_A = get_grade_percentage(Excellence_A, Merit_A, Achieve_A, Not_Achieve_A, number_student_dict_A)
+    
     standard_B = None
     ethnicity_B = None
     candidate_id_list_B = None
     candidate_grade_list_B = None
     candidate_year_list_B = None
     
-    Excellence_B, Merit_B, Achieve_B, Develop_B, Not_Achieve_B = None, None, None, None, None
+    Excellence_B, Merit_B, Achieve_B, Develop_B, Not_Achieve_B, number_student_dict_B, grade_percentage_B = None, None, None, None, None, None, None
     
     if request.form.get("appliable_B"):
         standard_B = request.form['standard_B']
+        standard_B_name = standard_B
         ethnicity_B = request.form.getlist('ethnicity_B')
         standard_B = models.Standard.query.filter(models.Standard.name == (standard_B)).all()[0].id
         candidate_id_list_B, candidate_grade_list_B, candidate_year_list_B = get_trend_result(start_year, end_year, standard_B, ethnicity_B)
         
-        Excellence_B, Merit_B, Achieve_B, Develop_B, Not_Achieve_B = process_grade_year(candidate_id_list_B, candidate_grade_list_B, candidate_year_list_B)
+        Excellence_B, Merit_B, Achieve_B, Develop_B, Not_Achieve_B, number_student_dict_B = process_grade_year(candidate_id_list_B, candidate_grade_list_B, candidate_year_list_B)
+        grade_percentage_B = get_grade_percentage(Excellence_B, Merit_B, Achieve_B, Not_Achieve_B, number_student_dict_B)
+    
+    if standard_B:
+        title = f"Grade Trend of '{subject} {standard_A_name}' VS '{subject} {standard_B_name}' from {start_year} to {end_year}"
+    else:
+        title = f"Grade Trend of '{subject} {standard_A_name}' from {start_year} to {end_year}"
+    labels = [year for year in range(start_year, end_year+1)]
+    
     # Same thing is done to curve B
     
     
+    # TO DO: (13/08)
+    
+    # After that, maybe a table showing all the data can be useful
+    
+    
+    # Right after that, test everything so far and try to break stuff
+    # start working on all the CSS
+    # Then 'error' treatments maybe
+    
     return render_template("subject_trend_graph.html", start_year =start_year,
-                        end_year = end_year, subject = subject,
+                        end_year = end_year, subject = subject, 
+                        
+                        title = title,
+                        labels = labels,
                         
                         standard_A = standard_A, standard_B = standard_B,
                         ethnicity_A = ethnicity_A, ethnicity_B = ethnicity_B,
@@ -185,6 +270,9 @@ def subject_trend_graph():
                         Achieve_B = Achieve_B,
                         Develop_B = Develop_B, 
                         Not_Achieve_B = Not_Achieve_B,
+                        
+                        grade_percentage_A = grade_percentage_A,
+                        grade_percentage_B = grade_percentage_B
                         )
 
 

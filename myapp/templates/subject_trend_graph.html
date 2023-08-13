@@ -38,113 +38,127 @@
 <br>
 ----------------------------------
 <br>
-{{Excellence_A}}
+{{grade_percentage_A}}
 <br>
-{{Merit_A}}
+{{grade_percentage_B}}
 <br>
-{{Achieve_A}}
-<br>
-{{Develop_A}}
-<br>
-{{Not_Achieve_A}}
-<br>
+
+
 <div class="dropout_graph_container">
     <div class="dropout_graph">
-        <canvas id="dropOutGraph"></canvas>
+        <canvas id="sujectTrendGraph"></canvas>
     </div>
 </div>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!--Link the chart.js-->
     <script>
 
-    let graph = document.getElementById('dropOutGraph').getContext('2d');
+
+
+    let graph = document.getElementById('sujectTrendGraph').getContext('2d');
     Chart.defaults.font.size = 16;
+
+    let title = JSON.parse('{{ title|tojson }}');
+    let labels = JSON.parse('{{ labels|tojson }}');
+    
+    let start_year = JSON.parse('{{ start_year|tojson }}');
+    let grade_percentage_A = JSON.parse('{{ grade_percentage_A|tojson }}');
+    let grade_percentage_B = JSON.parse('{{ grade_percentage_B|tojson }}');
+
+    let datasets = [{
+        label: 'Assessment1 - E',
+        data: grade_percentage_A[0],
+        borderWidth: 1,
+        hoverBorderWidth: 3,
+        hoverBorderColor: '#238fb6',
+        backgroundColor: '#ffd966',
+        stack: 'Assessment - 1'
+        },
+        {
+            label: 'Assessment1 - M',
+            data: grade_percentage_A[1],
+            borderWidth: 1,
+            hoverBorderWidth: 3,
+            hoverBorderColor: '#238fb6',
+            backgroundColor: '#6d9eeb',
+            stack: 'Assessment - 1'
+        },
+        {
+            label: 'Assessment1 - A',
+            data: grade_percentage_A[2],
+            borderWidth: 1,
+            hoverBorderWidth: 3,
+            hoverBorderColor: '#238fb6',
+            backgroundColor: '#5ca017', 
+            stack: 'Assessment - 1'
+        },
+        {
+            label: 'Assessment1 - NA',
+            data: grade_percentage_A[3],
+            borderWidth: 1,
+            hoverBorderWidth: 3,
+            hoverBorderColor: '#238fb6',
+            backgroundColor: '#dc4c4c',
+            stack: 'Assessment - 1'
+        }];
+
+    if (grade_percentage_B){
+        datasets.push(
+            {label: 'Assessment2 - E',
+            data: grade_percentage_B[0],
+            borderWidth: 1,
+            hoverBorderWidth:3,
+            hoverBorderColor: '#238fb6',
+            backgroundColor: '#f49717',
+            stack: 'Assessment - 2'
+            });
+
+        datasets.push(
+            {label: 'Assessment2 - M',
+            data: grade_percentage_B[1],
+            borderWidth: 1,
+            hoverBorderWidth:3,
+            hoverBorderColor: '#238fb6',
+            backgroundColor: '#3c78d8',
+            stack: 'Assessment - 2'
+            });
+
+        datasets.push(
+            {label: 'Assessment2 - A',
+            data: grade_percentage_B[2],
+            borderWidth: 1,
+            hoverBorderWidth:3,
+            hoverBorderColor: '#238fb6',
+            backgroundColor: '#38761d',
+            stack: 'Assessment - 2'
+            });
+
+        datasets.push(
+            {label: 'Assessment2 - NA',
+            data: grade_percentage_B[3],
+            borderWidth: 1,
+            hoverBorderWidth:3,
+            hoverBorderColor: '#238fb6',
+            backgroundColor: '#cc0000',
+            stack: 'Assessment - 2'}
+        );
+    }
 
     let testingGraph = new Chart(graph, 
     {type: 'bar',
-    data: {labels: [ '2021', '2022', '2023'],
-            datasets: [// Assessment 2 Stack
-                {
-                    label: 'Assessment1 - E',
-                    data: [25, 12, 31],
-                    borderWidth: 1,
-                    hoverBorderWidth: 3,
-                    hoverBorderColor: '#238fb6',
-                    backgroundColor: '#ffd966',
-                    stack: 'Assessment - 1'
-                },
-                {
-                    label: 'Assessment1 - M',
-                    data: [10, 32, 23],
-                    borderWidth: 1,
-                    hoverBorderWidth: 3,
-                    hoverBorderColor: '#238fb6',
-                    backgroundColor: '#6d9eeb',
-                    stack: 'Assessment - 1'
-                },
-                {
-                    label: 'Assessment1 - A',
-                    data: [43, 15, 19],
-                    borderWidth: 1,
-                    hoverBorderWidth: 3,
-                    hoverBorderColor: '#238fb6',
-                    backgroundColor: '#5ca017', 
-                    stack: 'Assessment - 1'
-                },
-                {
-                    label: 'Assessment1 - NA',
-                    data: [21, 31, 13],
-                    borderWidth: 1,
-                    hoverBorderWidth: 3,
-                    hoverBorderColor: '#238fb6',
-                    backgroundColor: '#dc4c4c',
-                    stack: 'Assessment - 1'
-                },
+    data: {labels: labels,
+            datasets: datasets},
 
 
-                        {label: 'Assessment2 - E',
-                        data: [ 25, 12, 31],
-                        borderWidth: 1,
-                        hoverBorderWidth:3,
-                        hoverBorderColor: '#238fb6',
-                        backgroundColor: '#f49717',
-                        stack: 'Assessment - 2'
-                        },
-                        {label: 'Assessment2 - M',
-                        data: [ 10, 32, 23],
-                        borderWidth: 1,
-                        hoverBorderWidth:3,
-                        hoverBorderColor: '#238fb6',
-                        backgroundColor: '#3c78d8',
-                        stack: 'Assessment - 2'
-                        },
-
-                        {label: 'Assessment2 - A',
-                        data: [ 43, 15, 19],
-                        borderWidth: 1,
-                        hoverBorderWidth:3,
-                        hoverBorderColor: '#238fb6',
-                        backgroundColor: '#38761d',
-                        stack: 'Assessment - 2'},
-
-                        {label: 'Assessment2 - NA',
-                        data: [ 21, 31, 13],
-                        borderWidth: 1,
-                        hoverBorderWidth:3,
-                        hoverBorderColor: '#238fb6',
-                        backgroundColor: '#cc0000',
-                        stack: 'Assessment - 2'}
-                        
-                    ],},
     options: {
         //intersection with mode index can give labels for both point at the same time//
 
         plugins: {
             title: {
                 display: true,
-                text: 'title',
+                text: title,
                 font: {
-                    size: 30
+                    size: 20
                 }
             },
             legend:{
@@ -159,9 +173,8 @@
             x:{
                 ticks:{
                     callback: function (value){
-                        return value+ 2018;// Extract the year part from the label and return it
+                        return value + start_year;// Extract the year part from the label and return it
                         },
-                        stacked: true,
                     }
                 },
             y:{
