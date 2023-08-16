@@ -6,23 +6,31 @@
     
 
 {% block content %}
+<!-- Home page contents -->
+<div class="loading"><div class="loading-text">Loading ~ </div></div>
 
 <div class = "home-background">
+
+    <!-- Left container -->
     <div class = "home-container-left">
+        <!-- Image link to Johnny' websites, but not connected yet-->
         <a href="{{url_for('home')}}">
             <img src="/static/johnny_bar_graph.png" class="home-image" style = "opacity: 0.8;">
         </a>
+        Click the image to create GENERAL graphs by comparing Burnside Results VS Decile 8~10 Schools' Results:<br><br>
         This project is made by the other student....<br>
         Not connected to current website yet, please be patient
     </div>
 
+    <!-- Right container-->
     <div class = "home-container-right">
+        <!-- Image link to my websites (option.html) for users to choose what they want to do with my website -->
         <a href="{{url_for('option')}}">
             <img src="/static/devin_bar_graph.png" class="home-image">
         </a>
-        Internal management for courses (digital course only):<br><br>
-        • Graphs about student dropout rate over years on a subject may be generated<br>
-        • Graphs about student performances on a subject over years on a subject may be generated
+        Click the image to create SPECIFIC graphs related to Burnside's subjects (digital courses only) over years:<br><br>
+        • Graphs about student dropout rate on a subject over years <br>
+        • Graphs about student performances on a subject over years
     </div>
 
 </div>

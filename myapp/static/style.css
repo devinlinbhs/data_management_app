@@ -2,8 +2,70 @@ body {
     min-height: 100vh;
     max-width: 100vw;
     background-color:#e3e0dd;
-    font-family: Open Sans;
+    font-family: Comic Sans MS;
+    position: relative; /* Add position relative to the body */
 }
+
+/* Add smoothness for transitions between pages */
+.loading{
+    background-image: url(/static/loading.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    height: 100vh;
+    width:100vw;
+
+    position: fixed; /* Use fixed positioning for the loading screen */
+    top: 0;
+    left: 0;
+
+    opacity: 0;
+    transition: opacity 1s;
+    z-index: 1; /* Set a higher z-index to place it on top of other elements */
+
+    animation: fading 1s, invisible 0.001s 1s;
+    animation-fill-mode: forwards; /* Keep the animation state after it ends */
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+@keyframes fading {
+    0% {
+        opacity: 1; 
+    }
+    20% {
+        opacity: 1; 
+    }
+    40% {
+        opacity: 1; 
+    }
+    99.5%{
+        opacity: 0.05;
+    }
+    100% {
+        opacity: 0; /* Quickly fade out */
+    }
+}
+
+@keyframes invisible {
+    0% {
+        z-index: 1; 
+    }
+    100% {
+        z-index: -1; 
+        /* Hide the loading text behind all the element 
+        so it doesn't cover everything*/
+    }
+}
+
+.loading-text{
+    color:#e3e0dd;
+    font-weight: 900;
+    font-size: min(6rem, 10.5vw);
+}
+
 
 /* Navigation bar part */
 
@@ -104,10 +166,8 @@ a {
 
 .home-container-left:hover{
     scale: 1.05;
-    transition: color 1s, font-size 1s, font-style 0s;
+    transition: 1s;
     opacity: 0.9;
-
-    font-style: italic;
 }
 
 .home-container-right{
@@ -127,16 +187,25 @@ a {
 
 .home-container-right:hover{
     scale: 1.05;
-    transition: color 1s, font-size 1s, font-style 0s;
+    transition: 1s;
     opacity: 0.8;
-
-    font-style: italic;
 }
 /* End of the containers */
 
 
 /* Screen width smaller than 1200px */
 @media (max-width: 1200px) {
+    /* Smaller Nav link text */
+    li {
+        font-size: min(1.6rem, 2.8vw);
+    }
+
+    li a:hover {
+        font-size: min(2rem, 3.5vw);
+    }
+
+
+    /* Different home format */
     .home-background {
         flex-direction: column; /* Change flex direction to column */
         align-items: center;
@@ -150,22 +219,25 @@ a {
         height: max(60vh, 100%);
         margin: 5vh;
         
+        font-size: min(1.2rem, 2.1vw);
     }
 
     .home-container-right {
         scale: 1.2;
         height: max(60vh, 100%);
-        margin-top: 16vh; 
+        margin-top: 13vh; 
+
+        font-size: min(1.2rem, 2.1vw);
     }
 
     .home-container-left:hover{
         scale: 1.26;
-        transition: color 1s, font-size 1s, font-style 0s;
+        transition: 1s;
     }
     
     .home-container-right:hover{
         scale: 1.26;
-        transition: color 1s, font-size 1s, font-style 0s;
+        transition: 1s;
     }
     
 }
