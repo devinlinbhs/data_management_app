@@ -6,25 +6,25 @@
     
 
 {% block content %}
-<div class="home_container">
-    <div class="home_container_johnny">
+
+<div class = "home-background">
+    <div class = "home-container-left">
         <a href="{{url_for('home')}}">
-            <img src="/static/johnny_bar_graph.png" class="home_image">
+            <img src="/static/johnny_bar_graph.png" class="home-image" style = "opacity: 0.8;">
         </a>
-        <div class="johnny_discription">
-            This thingy describes what Johnny will do, I think it's about NCEA bar graph creation.
-        </div>
+        This project is made by the other student....<br>
+        Not connected to current website yet, please be patient
     </div>
 
-    <div class="home_container_devin">
+    <div class = "home-container-right">
         <a href="{{url_for('option')}}">
-            <img src="/static/devin_bar_graph.png" class="home_image">
+            <img src="/static/devin_bar_graph.png" class="home-image">
         </a>
-        <div class="devin_discription">
-            Internal data for Burnside, generating bar graphs/line graphs to make comparisons and show trends between different years
-        </div>
+        Internal management for courses (digital course only):<br><br>
+        • Graphs about student dropout rate over years on a subject may be generated<br>
+        • Graphs about student performances on a subject over years on a subject may be generated
     </div>
-    
+
 </div>
 
 {% endblock %}

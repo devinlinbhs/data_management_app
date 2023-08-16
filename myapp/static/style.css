@@ -1,104 +1,177 @@
-html{
+body {
     min-height: 100vh;
+    max-width: 100vw;
+    background-color:#e3e0dd;
+    font-family: Open Sans;
 }
 
-body{
-    max-width: 100%;
-    min-height: 100vh;
-    font-size: min(2rem, 2vw);
+/* Navigation bar part */
 
-    font-family:'Candal';
-    font-weight: bold;
-    
-    background-color: #e6e6e6;
-    margin: 0;
-}
-
-
-.top_nav{
-    background-color: rgba(0,87,71,255);
-    width:100%;
-}
-
-
-.ul_flex{
-    width:100%;
-
-    display: flex;
-    justify-content: space-between;
-    list-style-type: none;
-
-    margin: 0;
-    padding: 0;
-}
-
-li{
-    font-size: min(2rem, 3.5vw);
-    background-color: rgb(4,84,68);
-
-    padding-left: min(1.5rem, 1.5vw);
-    padding-right: min(1.5rem, 1.5vw);
-    padding-top: min(1.5rem, 1.5vh);
-    padding-bottom: min(1.5rem, 1.5vh);
-}
-
-li a{
-    text-decoration: none;
-    color: rgb(207,223,220);
-}
-
-a{
-    text-decoration: none;
-}
-
-.home_container{
-    width: 100vw;
-    height: 88vh;
-
-    display: flex;
-    justify-content: center;
-
-    background-color: aqua;
-}
-
-.home_container_johnny{
-    width: 35%;
-    height: 77vh;
-    background-color: white;
-    margin-right: 5%;
-    margin-top: 5.5vh;
-}
-
-.home_container_devin{
-    width: 35%;
-    height: 77vh;
-    background-color: white;
-    margin-left: 5%;
-    margin-top: 5.5vh;
-}
-
-.home_image{
+.top_nav {
     width: 100%;
-    height: 44vh;
-}
+    height: 8vh;
+    background-color: #02604c;
 
-
-input[type=checkbox] {
-    width: min(2rem, 2vw);
-    height: min(2rem, 2vw);
-}
-
-.dropout_graph_container{
     display: flex;
-    justify-content: center;
-    margin-top: 5%;
+    align-items: center; 
+}
+
+.ul_flex {
+    width: 100%;
+    list-style-type: none;
+    margin: 0;
+    padding-left: 3vw;
+    padding-right: 3vw;
+
+
+    display: flex;
+    align-items: center; 
+    justify-content: space-between;
+}
+
+li {
+    font-size: min(2rem, 3.5vw);
+    font-weight: bold;
+    height:100%;
 }
 
 
-.dropout_graph{
-    width: 80%;
-    height: 80%;
+
+li a {
+    text-decoration: none;
+    color: #fdfdfd;
+    opacity: 0.8;
 }
+
+/* Apply hover color and scaling effect to 'a' element */
+li a:hover {
+    color: rgb(207, 223, 220);
+    font-size: min(2.5rem, 4.3875vw);
+    font-style: italic;
+    transition: color 1s, font-size 1s, font-style 0s;
+}
+
+
+
+a {
+    text-decoration: none;
+    color: #fdfdfd;
+}
+
+
+
+/* Home page css */
+.home-background{
+    display:flex;
+    align-items: center;
+    height: 92vh;
+    width: 100%;
+    background-image: url(/static/background.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.home-image{
+    width: 34vw;
+    height: 24vw;
+    margin-bottom: 2vh;
+    border-radius: 2vh;
+}
+
+.home-image:hover{
+    scale: 1.02;
+    transition: 1s;
+}
+
+
+/* The 2 containers are pretty much the same apart from their margin*/
+.home-container-left{
+    width: 36vw;
+    height: 72vh;
+    border-radius: 3vh;
+
+    margin-left: 9.3vw;
+    margin-right: 9.4vw;
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+
+    font-size: min(1.4rem, 2.45vw);
+    background-color: rgba(2, 96, 76, 0.3);
+}
+
+.home-container-left:hover{
+    scale: 1.05;
+    transition: color 1s, font-size 1s, font-style 0s;
+    opacity: 0.9;
+
+    font-style: italic;
+}
+
+.home-container-right{
+    width: 36vw;
+    height: 72vh;
+    border-radius: 3vh;
+
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+
+    font-size: min(1.4rem, 2.45vw);
+    background-color: rgba(2, 96, 76, 0.3);
+}
+
+
+.home-container-right:hover{
+    scale: 1.05;
+    transition: color 1s, font-size 1s, font-style 0s;
+    opacity: 0.8;
+
+    font-style: italic;
+}
+/* End of the containers */
+
+
+/* Screen width smaller than 1200px */
+@media (max-width: 1200px) {
+    .home-background {
+        flex-direction: column; /* Change flex direction to column */
+        align-items: center;
+        height: 100%;
+        padding-top: 7.5vh;
+        padding-bottom: 10%;
+    }
+
+    .home-container-left {
+        scale: 1.2;
+        height: max(60vh, 100%);
+        margin: 5vh;
+        
+    }
+
+    .home-container-right {
+        scale: 1.2;
+        height: max(60vh, 100%);
+        margin-top: 16vh; 
+    }
+
+    .home-container-left:hover{
+        scale: 1.26;
+        transition: color 1s, font-size 1s, font-style 0s;
+    }
+    
+    .home-container-right:hover{
+        scale: 1.26;
+        transition: color 1s, font-size 1s, font-style 0s;
+    }
+    
+}
+
+
+
 
 .simple-dropdown {
     width: 200px; /* Set a fixed width or adjust as needed */
