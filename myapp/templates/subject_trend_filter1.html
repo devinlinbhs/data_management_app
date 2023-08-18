@@ -9,16 +9,20 @@
 {% block content %}
 <!--The first box for filtering-->
 
-<form action="/subject_trend_filter2", method="post" class="home_container">
-    <div style="background-color: white; margin-top: 5.5vh; width:80%;">
-        <div style="width:100%; display:flex; flex-direction: column; align-items: center;">
-            <h2>Filters</h2>
-        
+<form action="/subject_trend_filter2", method="post", class="subject-trend-filter-background">
+    <div class="subject-trend-filter-container">
 
-            <div style="width:100%; display:flex; justify-content:space-between;">
+        <div class="subject-trend-filter-content-layout1">
+
+            <div class="subject-trend-filter-title">Subject Trend Filter</div>
+                The graph will contain the grades that students get in their SELECTED assessment over a SELECTED time interval:<br><br>
+                • Please SELECT the "YEAR INTERVAL" you want your graph to generate (from "Year of Start" to "Year of Finish")<br>
+                • Please SELECT the "COURSE" you want your graph to generate (e.g. "9DGT", "11DTP")<br><br>
+
+            <div class="subject-trend-filter-content-layout2">
                 <!--Second drop down-->
-                <div style="width: 35%; display:flex;  flex-direction: column; align-items: center;">
-                    <label>Year of Start</label>
+                <div class="subject-trend-filter-content-layout3">
+                    <label class="subject-trend-filter-label">Year of Start</label>
                     <select name="start_year">
                         <option value="2021">2021 - (default)</option>
                         <option value="2020">2020</option>
@@ -27,8 +31,8 @@
                 </div>
                 
 
-                <div style="width: 35%; display:flex; flex-direction: column; align-items: center;">
-                    <label>Year of Ending</label>
+                <div class="subject-trend-filter-content-layout3">
+                    <label class="subject-trend-filter-label">Year of Ending</label>
                     <select name="end_year">
                         <option value="2022">2022 - (default)</option>
                         <option value="2021">2021</option>
@@ -36,18 +40,20 @@
                         <option value="2019">2019</option>
                     </select>
                 </div>
-                
             </div>
         
             <!--Third drop down-->
-            <label>Course</label>
-            <select name="course">
-                <option value="9DGT">9DGT - (default)</option>
-                <option value="10DGT">10DGT</option>
-                <option value="11DTP">11DTP</option>
-            </select>
+            <div class="subject-trend-filter-content-layout3">
+                <label class="subject-trend-filter-label">Course</label>
+                <select name="course">
+                    <option value="9DGT">9DGT - (default)</option>
+                    <option value="10DGT">10DGT</option>
+                    <option value="11DTP">11DTP</option>
+                </select>
+            </div>
             <br>
-            <div><input type="submit" value="Next Step"></div>
+
+            <div><input type="submit" class="subject-trend-filter-button" value="Next Step"></div>
         </div>
         
     </div>

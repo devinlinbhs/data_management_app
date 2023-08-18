@@ -65,10 +65,10 @@ body {
     font-weight: 900;
     font-size: min(6rem, 10.5vw);
 }
+/* End of transitions between pages */
 
 
 /* Navigation bar part */
-
 .top_nav {
     width: 100%;
     height: 8vh;
@@ -85,7 +85,6 @@ body {
     padding-left: 3vw;
     padding-right: 3vw;
 
-
     display: flex;
     align-items: center; 
     justify-content: space-between;
@@ -97,12 +96,11 @@ li {
     height:100%;
 }
 
-
-
 li a {
     text-decoration: none;
     color: #fdfdfd;
     opacity: 0.8;
+    transition: color 1s, font-size 1s, font-style 0s;
 }
 
 /* Apply hover color and scaling effect to 'a' element */
@@ -113,12 +111,11 @@ li a:hover {
     transition: color 1s, font-size 1s, font-style 0s;
 }
 
-
-
 a {
     text-decoration: none;
     color: #fdfdfd;
 }
+/* End of Nav bar */
 
 
 
@@ -139,6 +136,7 @@ a {
     height: 24vw;
     margin-bottom: 2vh;
     border-radius: 2vh;
+    transition: 1s;
 }
 
 .home-image:hover{
@@ -162,6 +160,7 @@ a {
 
     font-size: min(1.4rem, 2.45vw);
     background-color: rgba(2, 96, 76, 0.3);
+    transition: 1s;
 }
 
 .home-container-left:hover{
@@ -182,6 +181,7 @@ a {
 
     font-size: min(1.4rem, 2.45vw);
     background-color: rgba(2, 96, 76, 0.3);
+    transition: 1s;
 }
 
 
@@ -191,6 +191,172 @@ a {
     opacity: 0.8;
 }
 /* End of the containers */
+
+
+/* Note option page is now using the CSS on the home page */
+/* Maybe it will have its unique CSS when more functionality added to option.html */
+
+
+/* Subject trend filter page CSS */
+.subject-trend-filter-background{
+    display:flex;
+    align-items: center;
+    justify-content: center;
+    height: 92vh;
+    width: 100%;
+    background-image: url(/static/background.png);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center; 
+}
+
+.subject-trend-filter-title{
+    font-size: min(3rem, 5.25vw);
+    font-weight: 600;
+}
+
+.subject-trend-filter-container{
+    width: 60vw;
+    height: 72vh;
+    border-radius: 3vh;
+
+    padding-top: 1vh;
+    padding-bottom: 1vh;
+    padding-left: 1vw;
+    padding-right: 1vw;
+
+    font-size: min(1.4rem, 2.45vw);
+    background-color: rgba(2, 96, 76, 0.3);
+    transition: scale 1s, opacity 1s;
+}
+
+.subject-trend-filter-container:hover{
+    scale: 1.05;
+    transition: 1s;
+    opacity: 0.9;
+}
+
+
+.subject-trend-filter-content-layout1{
+    width:100%; 
+    height: 100%;
+
+    display:flex; 
+    flex-direction: column; 
+    align-items: center; 
+}
+
+.subject-trend-filter-content-layout2{
+    width:100%;
+    height: 12vh;
+
+    display:flex; 
+    justify-content:space-between;
+}
+
+.subject-trend-filter-content-layout3{
+    width: 35%;
+    height: 12vh; 
+    display:flex;  
+    flex-direction: column; 
+    align-items: center;
+
+}
+
+.subject-trend-filter-label{
+    font-size: min(1.6rem, 2.7vw);
+    font-weight: 600;
+}
+
+
+.subject-trend-filter-button{
+    font-size: min(1.5rem, 2.525vw);
+    font-weight: bold;
+
+    height: 5vh;
+    width: min(11rem, 19vw);
+    padding-left: 0.5vw;
+    padding-right: 0.5vw;
+    padding-top: 0.5vh;
+    padding-bottom: 0.5vh;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    opacity: 0.9;
+    
+    border-radius: 1rem;
+    border: 0.2rem solid #b8baa5;
+    box-shadow: 0 1rem 2rem 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+    background-color: #001b2e5e;
+    transition: scale 2s, opacity 2s, border 2s;
+}
+
+.subject-trend-filter-button:hover{
+    border: 0.2rem solid #72cb87;
+    box-shadow: 0 0 2rem rgba(0, 255, 47, 0.8); /* Add glowing box-shadow */
+    scale: 1.1;
+    transition: border-color 1s, box-shadow 1s, scale 1s;
+}
+/* End of Subject Trend Filter 1 CSS*/
+
+
+
+
+/* Select class for general (typically for subject trend filter 1)*/
+select {
+    background-color: #d9e9cb;
+    border-radius: 1rem;
+    border: 0.3rem solid #b8baa5;
+    margin: 0.1rem;
+    padding-left: 1rem;
+    padding-right: 1rem;
+    padding-top: 0.3rem;
+    padding-bottom: 0.3rem;
+
+    font-size: min(1.4rem, 2.45vw);
+    font-family: Comic Sans MS;
+    transition: border-color 2s, box-shadow 2s, scale 2s;
+}
+
+select:hover {
+    border: 0.4rem solid #72cb87;
+    box-shadow: 0 0 2rem rgba(0, 255, 47, 0.8); /* Add glowing box-shadow */
+    margin: 0;
+    scale: 1.1;
+    transition: border-color 1s, box-shadow 1s, scale 1s;
+}
+
+select:focus {
+    border: 0.4rem solid #22c75c;
+    box-shadow: 0 0 2rem rgba(0, 255, 47, 0.8); /* Add glowing box-shadow */
+    opacity: 0.85;
+}
+
+select option {
+    background-color: #fdfdfd00;
+    font-size: min(1.4rem, 2.45vw);
+
+    font-family: Comic Sans MS;
+    opacity: 0.1;
+    transition: background-color 1s, opacity 1s;
+}
+/* End of select class */
+
+
+
+.simple-dropdown {
+    width: 200px; /* Set a fixed width or adjust as needed */
+}
+
+.simple-dropdown summary {
+    padding: 5px;
+    border: 1px solid #ccc;
+    background-color: #f9f9f9;
+}
+
+
 
 
 /* Screen width smaller than 1200px */
@@ -203,7 +369,6 @@ a {
     li a:hover {
         font-size: min(2rem, 3.5vw);
     }
-
 
     /* Different home format */
     .home-background {
@@ -239,21 +404,57 @@ a {
         scale: 1.26;
         transition: 1s;
     }
-    
+    /* Finish small screen home */
+
+
+    /* Start of subject filter1 CSS for small screen */
+    .subject-trend-filter-title{
+        font-size: max(2.4rem, 4.2vw);
+    }
+
+    .subject-trend-filter-container{
+        width: 70vw;
+        height: 70vh;
+        border-radius: 4vh;
+        font-size: max(1.2rem, 2.1vw);
+
+        padding-top: 1.5vh;
+        padding-bottom: 1.5vh;
+        padding-left: 1.5vw;
+        padding-right: 1.5vw;
+    }
+
+    .subject-trend-filter-content-layout2{
+        width:90%;
+    }
+
+    .subject-trend-filter-content-layout3{
+        height: 10vh; 
+    }
+
+    .subject-trend-filter-label{
+        font-size: min(1.4rem, 2.45vw);
+    }
+
+    .subject-trend-filter-button{
+        font-size: min(1.4rem, 2.45vw);
+    }
+
+    /* Select class for general (typically for subject trend filter 1)*/
+    select {
+        font-size: min(1.2rem, 2.1vw);
+    }
+
+    select option {
+        font-size: min(1.2rem, 2.1vw);
+    }
+    /* End of Subject Trend Filter 1 CSS*/
 }
 
 
 
 
-.simple-dropdown {
-    width: 200px; /* Set a fixed width or adjust as needed */
-}
 
-.simple-dropdown summary {
-    padding: 5px;
-    border: 1px solid #ccc;
-    background-color: #f9f9f9;
-}
 
 
 table {
