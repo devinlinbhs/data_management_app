@@ -9,27 +9,31 @@
 {% block content %}
 <!--The first box for filtering-->
 
-<form action="/dropout_trend_graph", method="post" class="home_container">
-    <div style="background-color: white; margin-top: 5.5vh; width:80%;">
-        <div style="margin-left: 10%;">
-        <h2>Filters</h2>
-        
-        <!--First drop down-->
-        <label style= "background-color: rgb(220, 172, 39);">Continue/drop out on subject</label>
-        <br>
-        <select name="group">
-            <option value="continue">continue - (default)</option>
-            <option value="dropout">dropout</option>
-        </select>
-        <br>
-        <br>
+<form action="/dropout_trend_graph", method="post" class="dropout-trend-filter-background">
+    <div class="dropout-trend-filter-container">
+
+    <div class="dropout-trend-filter-layout1">
+        <div class="subject-trend-filter-title">Drop Out Trend Filter</div>
+        The graph will contain the DROP OUT/CONTINUE RATE of students from a SELCTED COURSE to another SELECTED COURSE over a SELECTED INTERVAL:<div class="note"><br>
+            • Please SELECT the "YEAR INTERVAL" you want your graph to generate (from "Year of Start" to "Year of Finish")<br>
+            • Please SELECT the "START COURSE" & "END COURSE" you want your graph to generate (e.g. "9DGT", "11DTP")<br>
+            • Please TICK the box for whether you need to generate the second curve & the third curve<br>
+            • Please SELECT the interested ethnicites of the students<br> (note: you can multi-select ethnicites by using "Ctrl + Click")</div><br>
+
+        <div class="dropout-trend-filter-layout2">
+            <div class="dropout-trend-filter-layout3">
+                <label class="dropout-trend-filter-label">Continue/drop out on subject</label>
+                <select name="group">
+                    <option value="continue">continue - (default)</option>
+                    <option value="dropout">dropout</option>
+                </select>
+            </div>
         </div>
 
-        <div style="display:flex">
-            <!--Second drop down-->
-            <div style="width: 35%; margin-right: 5%; margin-left: 10%;">
-                <label>Year of Start</label>
-                <br>
+
+        <div class="dropout-trend-filter-layout2">
+            <div class="dropout-trend-filter-layout3">
+                <label class="dropout-trend-filter-label">Year of Start</label>
                 <select name="start_year">
                     <option value="2021">2021 - (default)</option>
                     <option value="2020">2020</option>
@@ -37,9 +41,8 @@
                 </select>
             </div>
 
-            <div style="width: 35%; margin-left: 5%;">
-                <label>Year of Ending</label>
-                <br>
+            <div class="dropout-trend-filter-layout3">
+                <label class="dropout-trend-filter-label">Year of Ending</label>
                 <select name="end_year">
                     <option value="2022">2022 - (default)</option>
                     <option value="2021">2021</option>
@@ -48,16 +51,11 @@
                 </select>
             </div>
         </div>
-        <br>
-        <br>
 
 
-
-        <div style="display:flex">
-            <!--Third drop down-->
-            <div style="width: 35%; margin-right: 5%; margin-left: 10%;">
-                <label>From (subject)</label>
-                <br>
+        <div class="dropout-trend-filter-layout2">
+            <div class="dropout-trend-filter-layout3">
+            <label class="dropout-trend-filter-label">From (subject)</label>
                 <select name="start_subject">
                     <option value="9DGT">9DGT - (default)</option>
                     <option value="10DGT">10DGT</option>
@@ -67,9 +65,8 @@
                 </select>
             </div>
 
-            <div style="width: 35%; margin-left: 5%;">
-                <label>From (subject)</label>
-                <br>
+            <div class="dropout-trend-filter-layout3">
+                <label class="dropout-trend-filter-label">To (subject)</label>
                 <select name="end_subject">
                     <option value="10DGT">10DGT - (default)</option>
                     <option value="11DTP">11DTP</option>
@@ -77,90 +74,103 @@
                     <option value="13DTP">13DTP</option>
                 </select>
             </div>
+        </div> 
+
+
+        <div class="dropout-trend-filter-layout2" style="margin-top: 3vh; margin-bottom:3vh;">
+            <div class="dropout-trend-filter-layout3">
+                <label class="dropout-trend-filter-label">Curve 1 Ethnicity Category</label>
+                <details>
+                    <summary class="multiple-dropdown">Select Ethnicities</summary>
+                    <select class="multiple-select" name="ethnicity_A" multiple>
+                        <option value="all">All - (default)</option>
+                        <option value="NZ European">NZ European</option>
+                        <option value="Maori">Maori</option>
+                        <option value="African">African</option>
+                        <option value="American">American</option>
+                        <option value="Australian">Australian</option>
+                        <option value="British">British</option>
+                        <option value="Chinese">Chinese</option>
+                        <option value="French">French</option>
+                        <option value="German">German</option>
+                        <option value="Indian">Indian</option>
+                        <option value="Italian">Italian</option>
+                        <option value="Japanese">Japanese</option>
+                        <option value="Korean">Korean</option>
+                        <option value="Russian">Russian</option>
+                        <option value="Samoan">Samoan</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </details> 
+            </div>
+
+            <div class="dropout-trend-filter-layout3">
+                <label class="subject-trend-filter-label">Curve 2 Ethnicity Category
+                    <input class="styled-checkbox" type="checkbox" name="appliable_B" value="appliable" default = 'nothing'>
+                    <span class="tick"></span>
+                </label>
+                <details>
+                    <summary class="multiple-dropdown">Select Ethnicities</summary>
+                    <select class="multiple-select" name="ethnicity_B" multiple>
+                        <option value="all">All - (default)</option>
+                        <option value="NZ European">NZ European</option>
+                        <option value="Maori">Maori</option>
+                        <option value="African">African</option>
+                        <option value="American">American</option>
+                        <option value="Australian">Australian</option>
+                        <option value="British">British</option>
+                        <option value="Chinese">Chinese</option>
+                        <option value="French">French</option>
+                        <option value="German">German</option>
+                        <option value="Indian">Indian</option>
+                        <option value="Italian">Italian</option>
+                        <option value="Japanese">Japanese</option>
+                        <option value="Korean">Korean</option>
+                        <option value="Russian">Russian</option>
+                        <option value="Samoan">Samoan</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </details>
+            </div>
+
+            <div class="dropout-trend-filter-layout3">
+                <label class="subject-trend-filter-label">Curve 3 Ethnicity Category
+                    <input class="styled-checkbox" type="checkbox" name="appliable_C" value="appliable" default = 'nothing'>
+                    <span class="tick"></span>
+                </label>
+                <details>
+                    <summary class="multiple-dropdown">Select Ethnicities</summary>
+                    <select class="multiple-select" name="ethnicity_C" multiple>
+                        <option value="all">All - (default)</option>
+                        <option value="NZ European">NZ European</option>
+                        <option value="Maori">Maori</option>
+                        <option value="African">African</option>
+                        <option value="American">American</option>
+                        <option value="Australian">Australian</option>
+                        <option value="British">British</option>
+                        <option value="Chinese">Chinese</option>
+                        <option value="French">French</option>
+                        <option value="German">German</option>
+                        <option value="Indian">Indian</option>
+                        <option value="Italian">Italian</option>
+                        <option value="Japanese">Japanese</option>
+                        <option value="Korean">Korean</option>
+                        <option value="Russian">Russian</option>
+                        <option value="Samoan">Samoan</option>
+                        <option value="Others">Others</option>
+                    </select>
+                </details>
+            </div>
+        </div>
             
+        <div class="dropout-trend-filter-layout2">
+            <div class="dropout-trend-filter-layout3">
+                <input class="subject-trend-filter-button" type="submit" value="Done !">
+            </div>
         </div>
-        <br>
-        <br>
-
-        <div style="margin-left: 10%;">
-            <label style= "background-color: rgb(220, 172, 39);">Curve 1 Ethnicity Category</label>
-            <br>
-            <details class="simple-dropdown">
-                <summary>Select Ethnicities</summary>
-                <select name="ethnicity_A" multiple class="unfolded-select">
-                    <option value="all">All - (default)</option>
-                    <option value="NZ European">NZ European</option>
-                    <option value="Maori">Maori</option>
-                    <option value="African">African</option>
-                    <option value="American">American</option>
-                    <option value="Australian">Australian</option>
-                    <option value="British">British</option>
-                    <option value="Chinese">Chinese</option>
-                    <option value="French">French</option>
-                    <option value="German">German</option>
-                    <option value="Indian">Indian</option>
-                    <option value="Italian">Italian</option>
-                    <option value="Japanese">Japanese</option>
-                    <option value="Korean">Korean</option>
-                    <option value="Russian">Russian</option>
-                    <option value="Samoan">Samoan</option>
-                    <option value="Others">Others</option>
-                </select>
-            </details> 
-            <h2>Curve 2 if appliable<input type="checkbox" name="appliable_B" value="appliable" default = 'nothing'></h2>
-            <label style= "background-color: rgb(220, 172, 39);">Curve 2 Ethnicity Category</label>
-            <br>
-            <details class="simple-dropdown">
-                <summary>Select Ethnicities</summary>
-                <select name="ethnicity_B" multiple class="unfolded-select">
-                    <option value="all">All - (default)</option>
-                    <option value="NZ European">NZ European</option>
-                    <option value="Maori">Maori</option>
-                    <option value="African">African</option>
-                    <option value="American">American</option>
-                    <option value="Australian">Australian</option>
-                    <option value="British">British</option>
-                    <option value="Chinese">Chinese</option>
-                    <option value="French">French</option>
-                    <option value="German">German</option>
-                    <option value="Indian">Indian</option>
-                    <option value="Italian">Italian</option>
-                    <option value="Japanese">Japanese</option>
-                    <option value="Korean">Korean</option>
-                    <option value="Russian">Russian</option>
-                    <option value="Samoan">Samoan</option>
-                    <option value="Others">Others</option>
-                </select>
-            </details>
-
-            <h2>Curve 3 if appliable<input type="checkbox" name="appliable_C" value="appliable" default = 'nothing'></h2>
-            <label style= "background-color: rgb(220, 172, 39);">Curve 3 Ethnicity Category</label>
-            <br>
-            <details class="simple-dropdown">
-                <summary>Select Ethnicities</summary>
-                <select name="ethnicity_C" multiple class="unfolded-select">
-                    <option value="all">All - (default)</option>
-                    <option value="NZ European">NZ European</option>
-                    <option value="Maori">Maori</option>
-                    <option value="African">African</option>
-                    <option value="American">American</option>
-                    <option value="Australian">Australian</option>
-                    <option value="British">British</option>
-                    <option value="Chinese">Chinese</option>
-                    <option value="French">French</option>
-                    <option value="German">German</option>
-                    <option value="Indian">Indian</option>
-                    <option value="Italian">Italian</option>
-                    <option value="Japanese">Japanese</option>
-                    <option value="Korean">Korean</option>
-                    <option value="Russian">Russian</option>
-                    <option value="Samoan">Samoan</option>
-                    <option value="Others">Others</option>
-                </select>
-            </details>
-        </div>
-        <div style="width: 35%; margin-right: 5%; margin-left: 10%;"><input type="submit" value="Submit"></div>
     </div>
+    </div>
+
     <!--Data can be retreated in {route.py} by {request.form['name']}-->
 </form>
 
