@@ -644,9 +644,6 @@ select option {
         padding-right: 1.5vw;
     }
     /* End of Subject Trend Filter 2 CSS*/
-
-
-
 }
 
 
@@ -670,7 +667,11 @@ tr:nth-child(even) {
     background-color: #dddddd;
 }
 
-
+.td-title{
+    text-align: center;
+    width: 100%;
+    height: 5vh;
+}
 
 
 

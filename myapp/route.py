@@ -72,21 +72,26 @@ def get_trend_result(start_year, end_year, standard, ethnicities):
                 result_A = models.Result.query.filter(
                             and_(models.Result.standard_id == (standard), 
                                 models.Result.data_year == year)).all()
+                for result in result_A:
+                    candidate_id_list.append(result.candidate_id)
+                    candidate_grade_list.append(result.grade)
+                    candidate_year_list.append(result.data_year)
+                    
         else:
             for ethnicity in ethnicities:
                 if ethnicity == 'Others':
                     result_A = models.Result.query.join(models.Candidate).filter(
                                     and_(models.Candidate.ethnicity.notin_(common_ethnicities), models.Result.standard_id == (standard),
                                         models.Result.data_year == year)).all()
-            else:
+                else:
                     result_A = models.Result.query.join(models.Candidate).filter(
                                     and_(models.Candidate.ethnicity == ethnicity, models.Result.standard_id == (standard),
                                         models.Result.data_year == year)).all()
         
-        for result in result_A:
-            candidate_id_list.append(result.candidate_id)
-            candidate_grade_list.append(result.grade)
-            candidate_year_list.append(result.data_year)
+                for result in result_A:
+                    candidate_id_list.append(result.candidate_id)
+                    candidate_grade_list.append(result.grade)
+                    candidate_year_list.append(result.data_year)
         
     return candidate_id_list, candidate_grade_list, candidate_year_list
 
@@ -358,16 +363,16 @@ def time_taken(start_course, end_course):
         start_course_year = int(start_course[0]+start_course[1])
     
     end_course_year = int(end_course[0]+end_course[1])
-    year_addition = end_course_year - start_course_year
+    year_taken = end_course_year - start_course_year
     
-    return year_addition
+    return year_taken
 
 def get_continue_rate(start_course, end_course, start_year, end_year, ethnicities, all_start_student_list, all_end_student_list):
     """helper function which returns the continue rate given by a start course and an end course"""
     
     # A list of continue rate from looping through start_year to end_year
     continue_rate = []
-    year_addition = time_taken(start_course, end_course)
+    year_taken = time_taken(start_course, end_course)
     
     for year in range(start_year, end_year +1):
         # year is the current looping year
@@ -375,9 +380,19 @@ def get_continue_rate(start_course, end_course, start_year, end_year, ethnicitie
         # For Curve 1:
         # All the result entry for the course 1
         start_student_list = []
+        
         if len(ethnicities) == 0 or 'all' in ethnicities:
             start_course_entry = models.Result.query.filter(and_(models.Result.course == start_course, models.Result.data_year == year)).all()
             # Now we have a list of student who is in the course
+            
+            for entry in start_course_entry:
+                student = entry.candidate_id
+                if student not in start_student_list:
+                    # If this student is new, add him to the list
+                    start_student_list.append(student)
+                    if [student, year] not in all_start_student_list:
+                        all_start_student_list.append([student, year])
+            
         else:
             for ethnicity in ethnicities:
                 if ethnicity == 'Others':
@@ -389,40 +404,49 @@ def get_continue_rate(start_course, end_course, start_year, end_year, ethnicitie
                                         and_(models.Result.course == start_course, models.Result.data_year == year, 
                                             models.Candidate.ethnicity == ethnicity)).all()
                     
-        for entry in start_course_entry:
-            student = entry.candidate_id
-            if student not in start_student_list:
-                # If this student is new, add him to the list
-                start_student_list.append(student)
-                if [student, year] not in all_start_student_list:
-                    all_start_student_list.append([student, year])
+                for entry in start_course_entry:
+                    student = entry.candidate_id
+                    if student not in start_student_list:
+                        # If this student is new, add him to the list
+                        start_student_list.append(student)
+                        if [student, year] not in all_start_student_list:
+                            all_start_student_list.append([student, year])
                         
                         
                         
         # All the result entry for the course 2 that's also in course 1
         end_student_list = []
         if len(ethnicities) == 0 or 'all' in ethnicities:
-            end_course_entry = models.Result.query.filter(and_(models.Result.course == end_course, models.Result.data_year == year + year_addition)).all()
+            end_course_entry = models.Result.query.filter(and_(models.Result.course == end_course, models.Result.data_year == year + year_taken)).all()
             
+            for entry in end_course_entry:
+                student = entry.candidate_id
+                if student not in end_student_list and student in start_student_list:
+                    # If this student is new and also taken the prerequisite
+                    # Add the student into the "continue category"
+                    end_student_list.append(student)
+                    if [student, year] not in all_end_student_list:
+                        all_end_student_list.append([student, year])
+                    
         else:
             for ethnicity in ethnicities:
                 if ethnicity == 'Others':
                     end_course_entry = models.Result.query.join(models.Candidate).filter(
                                         and_(models.Candidate.ethnicity.notin_(common_ethnicities), models.Result.course == end_course,
-                                            models.Result.data_year == year + year_addition)).all()
+                                            models.Result.data_year == year + year_taken)).all()
                 else:
                     end_course_entry = models.Result.query.join(models.Candidate).filter(
-                                        and_(models.Result.course == end_course, models.Result.data_year == year + year_addition, 
+                                        and_(models.Result.course == end_course, models.Result.data_year == year + year_taken, 
                                             models.Candidate.ethnicity == ethnicity)).all()
                 
-        for entry in end_course_entry:
-            student = entry.candidate_id
-            if student not in end_student_list and student in start_student_list:
-                # If this student is new and also taken the prerequisite
-                # Add the student into the "continue category"
-                end_student_list.append(student)
-                if [student, year] not in all_end_student_list:
-                    all_end_student_list.append([student, year])
+                for entry in end_course_entry:
+                    student = entry.candidate_id
+                    if student not in end_student_list and student in start_student_list:
+                        # If this student is new and also taken the prerequisite
+                        # Add the student into the "continue category"
+                        end_student_list.append(student)
+                        if [student, year] not in all_end_student_list:
+                            all_end_student_list.append([student, year])
                 
                 
         # Now we have a list of student in both courses
@@ -434,9 +458,34 @@ def get_continue_rate(start_course, end_course, start_year, end_year, ethnicitie
     return continue_rate, all_start_student_list, all_end_student_list
 
 
+def table_information(all_start_student_list, all_end_student_list):
+    """Take in the students who was at the course and the students who's also in the selected course"""
+    """Returns a list containing the [student-data-year, student-information] for both continued and dropout students"""
+    # "all_start_student_list" is all the student chosen the start course
+    # "all_end_student_list" is all the student chosen the end course
+    
+    # "student_of_interest" is all the id for the student dropped out
+    # "student_of_interest_year" indicate which year they took the starting subject
+    # "student_of_interest_result" is the result from sqlalchemy with the input of those "student_of_interest"
+    
+    student_of_interest = [student[0] for student in all_start_student_list if student not in all_end_student_list]
+    student_of_interest_year = [student[1] for student in all_start_student_list if student not in all_end_student_list]
+    student_of_interest_result = models.Candidate.query.filter(models.Candidate.id.in_(student_of_interest)).all()
+    
+    # "student_not_interest" is the students who stayed
+    student_not_interest = [student[0] for student in all_end_student_list]
+    student_not_interest_year = [student[1] for student in all_end_student_list]
+    student_not_interest_result = models.Candidate.query.filter(models.Candidate.id.in_(student_not_interest)).all()
+    
+    return [student_of_interest_year, student_of_interest_result, student_not_interest_year, student_not_interest_result]
+
+
+
 @app.route("/dropout_trend_graph", methods = ["GET","POST"])
 def dropout_trend_graph():
     # to see whether the user would like to have 1 or 2 graphs in the same time
+    
+    # Don't worry about the variables, they are there to define the variables
     appliable_B, appliable_C = None, None
     group = None
     start_year = None
@@ -444,6 +493,7 @@ def dropout_trend_graph():
     start_course = None
     end_course = None
     ethnicity_B, ethnicity_C  = None, None
+    
     if request.method == 'POST':
 
         group = request.form['group']
@@ -463,48 +513,36 @@ def dropout_trend_graph():
         if request.form.get("appliable_C"):
             appliable_C = request.form['appliable_C']
             ethnicity_C = request.form.getlist('ethnicity_C')
-            
-    '''Looks complicated, actually you get something like
-    appliable continue
-    2021 2022
-    9DGT 10DGT
     
-    appliable continue
-    2021 2023
-    9DGT 11DTP
-    
-    indicating that user want to know 
-    Line A: students who continued from 2021 9DGT to 2022 10DGT
-    Line B: students who continued from 2021 9DGT to 2023 11DTP
-    '''
-    
-    
+    # defining variables
     continue_rate_A, continue_rate_B, continue_rate_C = [],[],[]
-    all_start_student_list = []
-    all_end_student_list = []
-    continue_rate_A, all_start_student_list, all_end_student_list = get_continue_rate(start_course, end_course, start_year, end_year, 
-                                        ethnicity_A, all_start_student_list, all_end_student_list)
+    all_start_student_list_A = []
+    all_start_student_list_B = []
+    all_start_student_list_C = []
+    all_end_student_list_A = []
+    all_end_student_list_B = []
+    all_end_student_list_C = []
+    curve_A_information = None
+    curve_B_information = None
+    curve_C_information = None
+    
+    continue_rate_A, all_start_student_list_A, all_end_student_list_A = get_continue_rate(start_course, end_course, start_year, end_year, 
+                                        ethnicity_A, all_start_student_list_A, all_end_student_list_A)
+    curve_A_information = table_information(all_start_student_list_A, all_end_student_list_A)
+    
     if appliable_B:
-        continue_rate_B, all_start_student_list, all_end_student_list = get_continue_rate(start_course, end_course, start_year, end_year, 
-                                        ethnicity_B, all_start_student_list, all_end_student_list)
+        continue_rate_B, all_start_student_list_B, all_end_student_list_B = get_continue_rate(start_course, end_course, start_year, end_year, 
+                                        ethnicity_B, all_start_student_list_B, all_end_student_list_B)
+        curve_B_information = table_information(all_start_student_list_B, all_end_student_list_B)
+        
     if appliable_C:
-        continue_rate_C, all_start_student_list, all_end_student_list = get_continue_rate(start_course, end_course, start_year, end_year, 
-                                        ethnicity_C, all_start_student_list, all_end_student_list)
+        continue_rate_C, all_start_student_list_C, all_end_student_list_C = get_continue_rate(start_course, end_course, start_year, end_year, 
+                                        ethnicity_C, all_start_student_list_C, all_end_student_list_C)
+        curve_C_information = table_information(all_start_student_list_C, all_end_student_list_C)
 
-    # "all_start_student_list" is all the student chosen the start course
-    # "all_end_student_list" is all the student chosen the end course
     
-    # "student_of_interest" is all the id for the student dropped out
-    # "student_of_interest_year" indicate which year they took the starting subject
-    # "student_of_interest_result" is the result from sqlalchemy with the input of those "student_of_interest"
-    student_of_interest = [student[0] for student in all_start_student_list if student not in all_end_student_list]
-    student_of_interest_year = [student[1] for student in all_start_student_list if student not in all_end_student_list]
-    student_of_interest_result = models.Candidate.query.filter(models.Candidate.id.in_(student_of_interest)).all()
     
-    # "student_not_interest" is the students who stayed
-    student_not_interest = [student[0] for student in all_end_student_list]
-    student_not_interest_year = [student[1] for student in all_end_student_list]
-    student_not_interest_result = models.Candidate.query.filter(models.Candidate.id.in_(student_not_interest)).all()
+    
     
     labels = []
     for i in range(abs(end_year - start_year)+1):
@@ -519,10 +557,10 @@ def dropout_trend_graph():
                         continue_rate_C = continue_rate_C,
                         labels = labels,
                         
-                        student_of_interest_year = student_of_interest_year,
-                        student_of_interest_result = student_of_interest_result,
-                        student_not_interest_year = student_not_interest_year,
-                        student_not_interest_result = student_not_interest_result,
+                        curve_A_information = curve_A_information,
+                        curve_B_information = curve_B_information,
+                        curve_C_information = curve_C_information,
+
                         # Below is unnecesary but for testing
                         ethnicity_A = ethnicity_A,
                         ethnicity_B = ethnicity_B,
