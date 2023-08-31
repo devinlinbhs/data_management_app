@@ -543,7 +543,7 @@ select option {
 
 
 /* Start of dropout graph page */
-.dropout-graph-background{
+.dropout-trend-graph-background{
     display:flex;
     flex-direction: column;
     align-items: center;
@@ -561,7 +561,10 @@ select option {
     background-attachment: fixed;
 }
 
-.dropout-graph-layout{
+.dropout-trend-graph-layout{
+    margin-top: 11vh;
+    margin-bottom: 13vh;
+
     width: 100%;
     height: 80vh;
     display: flex;
@@ -569,25 +572,27 @@ select option {
     align-items: center;
 }
 
-.dropout-graph-container{
+.dropout-trend-graph-container{
     width: min(75rem, 90vw);
     padding: min(3rem, 3.6vw);
     border-radius:  min(5rem, 6vw);
 
     display: flex;
+    flex-direction: column;
     justify-content: center;
     align-items: center;
-
+    font-size: min(1.4rem, 2.45vw);
     background-color: rgba(2, 96, 76, 0.3);
+    transition: 1s;
 }
 
-.dropout-graph-container:hover{
+.dropout-trend-graph-container:hover{
     scale: 1.05;
     transition: 1s;
     background-color: rgba(2, 96, 76, 0.24);
 }
 
-.dropout-graph{
+.dropout-trend-graph{
     width: min(72rem, 86.4vw);
     padding: min(3rem, 3.6vw);
     border-radius:  min(3rem, 3.6vw);
@@ -611,8 +616,10 @@ select option {
 
 .dropout-table-container:hover{
     width: min(79.17rem, 95vw);
-    padding: min(3.8rem, 5.8vw);
+    padding-left: min(3.8rem, 5.8vw);
+    padding-right: min(3.8rem, 5.8vw);
     padding-top: min(3rem, 3.6vw);
+    padding-bottom: min(6.4rem, 7.6vh);
     border-radius:  min(5rem, 6vw);
 
     background-color: rgba(2, 96, 76, 0.24);
@@ -624,7 +631,7 @@ select option {
 /* Start of the table CSS */
 table {
     border-collapse: collapse;
-    width: 95%;
+    width: 96%;
 }
 
 td, th {
@@ -639,7 +646,7 @@ tr:nth-child(even) {
 }
 
 tr:nth-child(even):hover {
-    background-color: #ffffff;
+    background-color: #ffffffd8;
     transition: 0.3s;
     font-weight: bold;
 }
@@ -668,6 +675,39 @@ tr:nth-child(odd):hover {
     color: black;
 }
 /* End of Table CSS */
+
+
+/* Start of subject trend graph CSS */
+.subject-trend-graph-layout{
+    margin-top: 12vh;
+    width: 100%;
+    height: 80vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.subject-trend-graph-container{
+    width: min(75rem, 90vw);
+    padding: min(3rem, 3.6vw);
+    border-radius: min(5rem, 6vw);
+
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: min(1.4rem, 2.45vw);
+    background-color: rgba(2, 96, 76, 0.3);
+    transition: 1s;
+}
+
+.subject-trend-graph-container:hover{
+    scale: 1.05;
+    transition: 1s;
+    background-color: rgba(2, 96, 76, 0.24);
+}
+
+
 
 /* Screen width smaller than 1200px */
 @media (max-width: 1200px) {

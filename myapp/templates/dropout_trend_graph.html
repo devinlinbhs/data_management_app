@@ -9,12 +9,17 @@
 {% block content %}
 <div class="loading"><div class="loading-text">Loading ~ </div></div>
 <!--All the contents go down here-->
-<div class="dropout-graph-background">
-    <div class="dropout-graph-layout">
-        <div class="dropout-graph-container">
-            <div class="dropout-graph">
+<div class="dropout-trend-graph-background">
+    <div class="dropout-trend-graph-layout">
+        <div class="dropout-trend-graph-container">
+            <div class="dropout-trend-graph">
                 <canvas id="dropOutGraph"></canvas>
             </div>
+            <br>
+            Note:<br>
+            • If a point/graph is missing in a specific year, that means data is missing for that specific year<br>
+            • It is recommended to choose different ethnicities to compare and contrast if more than 2 ethnicities are selected<br>
+            • If window size is changed, recommend refresh the page to fix the chart (if necessary)
         </div>
     </div>
 
@@ -38,6 +43,11 @@
     let curve_B = JSON.parse('{{ appliable_B|tojson }}');
     let curve_C = JSON.parse('{{ appliable_C|tojson }}');
 
+    let line_A_name = JSON.parse('{{ line_A_name|tojson }}');
+    let line_B_name = JSON.parse('{{ line_B_name|tojson }}');
+    let line_C_name = JSON.parse('{{ line_C_name|tojson }}');
+
+
     let title;
     
     if (group =='continue'){
@@ -48,7 +58,7 @@
     let datasets = [];
     if (group =='continue'){
         datasets.push({
-                        label: 'Continue Rate Percentage -- Curve 1',
+                        label: line_A_name,
                         data: continueRate_A,
                         borderWidth: 3,
                         hoverBorderWidth:5,
@@ -58,7 +68,7 @@
     else{
         let dropoutRates_A = continueRate_A.map((value) => (value !== null ? 100 - value : null));
         datasets.push({
-                        label: 'Dropout Rate Percentage -- Curve 1',
+                        label: line_A_name,
                         data: dropoutRates_A,
                         borderWidth: 3,
                         hoverBorderWidth:5,
@@ -69,7 +79,7 @@
     if (curve_B){
         if (group =='continue'){
             datasets.push({
-                            label: 'Continue Rate Percentage -- Curve 2',
+                            label: line_B_name,
                             data: continueRate_B,
                             borderWidth: 3,
                             hoverBorderWidth:5,
@@ -79,7 +89,7 @@
         else{
             let dropoutRates_B = continueRate_B.map((value) => (value !== null ? 100 - value : null));
             datasets.push({
-                            label: 'Dropout Rate Percentage -- Curve 2',
+                            label: line_B_name,
                             data: dropoutRates_B,
                             borderWidth: 3,
                             hoverBorderWidth:5,
@@ -92,7 +102,7 @@
     if (curve_C){
         if (group =='continue'){
             datasets.push({
-                            label: 'Continue Rate Percentage -- Curve 3',
+                            label: line_C_name,
                             data: continueRate_C,
                             borderWidth: 3,
                             hoverBorderWidth:5,
@@ -101,7 +111,7 @@
         else{
             let dropoutRates_C = continueRate_C.map((value) => (value !== null ? 100 - value : null));
             datasets.push({
-                            label: 'Dropout Rate Percentage -- Curve 3',
+                            label: line_C_name,
                             data: dropoutRates_C,
                             borderWidth: 3,
                             hoverBorderWidth:5,
@@ -181,27 +191,10 @@
             </thead>
 
             <!-- The information for curve A -->
-            {% if ethnicity_A|length == 0 %}
-                <tr>
-                    <td colspan="6" class="td-title" style="background-color: #92d0fad5">All Ethnicities</td>
-                </tr>
+            <tr>
+                <td colspan="6" class="td-title" style="background-color: #92d0fad5">{{line_A_name}}</td>
+            </tr>
 
-            {% elif 'all' in ethnicity_A %}
-                <tr>
-                    <td colspan="6" class="td-title" style="background-color: #92d0fad5">All Ethnicities</td>
-                </tr>
-
-            {% else %}
-                <tr>
-                    <td colspan="6" class="td-title" style="background-color: #92d0fad5">
-                        {% for i in range(ethnicity_A|length) %}
-                            {{ ethnicity_A[i] }}
-                            {% if i != ethnicity_A|length - 1 %} &{% endif %}
-                        {% endfor %}
-                    </td>
-                </tr>
-                <!-- Example output: "NZ European & Maori & African & French & Others" -->
-            {% endif %}
 
             <!--curve_A_information[0] is a list of year of the students (interested group)
             curve_A_information[1] is a list of sql item e.g. [ <candidate 134>, <candidate 279> ]
@@ -226,27 +219,9 @@
             <!-- If there is a curve B, then apply the same thing to curve B -->
             {% if appliable_B %}
                 <!-- First show the title -->
-                {% if ethnicity_B|length == 0 %}
-                    <tr>
-                        <td colspan="6" class="td-title" style="background-color: #ffa0b4">All Ethnicities</td>
-                    </tr>
-
-                {% elif 'all' in ethnicity_B %}
-                    <tr>
-                        <td colspan="6" class="td-title" style="background-color: #ffa0b4">All Ethnicities</td>
-                    </tr>
-
-                {% else %}
-                    <tr>
-                        <td colspan="6" class="td-title" style="background-color: #ffa0b4">
-                            {% for i in range(ethnicity_B|length) %}
-                                {{ ethnicity_B[i] }}
-                                {% if i != ethnicity_B|length - 1 %} &{% endif %}
-                            {% endfor %}
-                        </td>
-                    </tr>
-                    <!-- Example output: "NZ European & Maori & African & French & Others" -->
-                {% endif %}
+                <tr>
+                    <td colspan="6" class="td-title" style="background-color: #ffa0b4">{{line_B_name}}</td>
+                </tr>
 
                 {% for student in curve_B_student %}
                     <tr>
@@ -264,28 +239,9 @@
             <!-- If there is a curve C, then apply the same thing to curve C -->
             {% if appliable_C %}
                 <!-- Get the title for curve C-->
-                {% if ethnicity_C|length == 0 %}
-                    <tr>
-                        <td colspan="6" class="td-title" style="background-color: #ffc389">All Ethnicities</td>
-                    </tr>
-
-                    {% elif 'all' in ethnicity_C %}
-                        <tr>
-                            <td colspan="6" class="td-title" style="background-color: #ffc389">All Ethnicities</td>
-                        </tr>
-
-                    {% else %}
-                        <tr>
-                            <td colspan="6" class="td-title" style="background-color: #ffc389">
-                                {% for i in range(ethnicity_C|length) %}
-                                    {{ ethnicity_C[i] }}
-                                    {% if i != ethnicity_C|length - 1 %} &{% endif %}
-                                {% endfor %}
-                            </td>
-                        </tr>
-                        <!-- Example output: "NZ European & Maori & African & French & Others" -->
-                {% endif %}
-
+                <tr>
+                    <td colspan="6" class="td-title" style="background-color: #ffc389">{{line_C_name}}</td>
+                </tr>
 
                 {% for student in curve_C_student %}
                     <tr>
@@ -297,6 +253,7 @@
                         <td>{{student[5]}}</td>
                     </tr>
                 {% endfor %}
+
             {% endif %}
 
         </tbody>

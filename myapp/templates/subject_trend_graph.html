@@ -7,48 +7,23 @@
 
 
 {% block content %}
-{{start_year}}
-<br>
-{{end_year}}
-<br>
-{{subject}}
-<br>
-{{standard_A}}
-{{ethnicity_A}}
-<br>
-----------------------------------
-<br>
-{{standard_B}}
-{{ethnicity_B}}
-<br>
-<br>
-
-
-{{candidate_id_list_A}}
-<br>
-{{candidate_grade_list_A}}
-<br>
-{{candidate_year_list_A}}
-<br>
-----------------------------------
-<br>
-{{candidate_id_list_B}}
-<br>
-{{candidate_grade_list_B}}
-<br>
-----------------------------------
-<br>
-{{grade_percentage_A}}
-<br>
-{{grade_percentage_B}}
-<br>
-
-
-<div class="dropout_graph_container">
-    <div class="dropout_graph">
-        <canvas id="sujectTrendGraph"></canvas>
+<div class="loading"><div class="loading-text">Loading ~ </div></div>
+<div class="dropout-graph-background">
+<!-- Basically can use the similar CSS to the dropout graph as they have similar formats-->
+    <div class="subject-trend-graph-layout">
+        <div class="subject-trend-graph-container">
+            <div class="dropout-graph">
+                <canvas id="sujectTrendGraph"></canvas>
+            </div>
+            <br>
+            Note:<br>
+            • If the graph is blank in a specific year, that means data is missing for that specific year<br>
+            • It is recommended to choose different assessments to compare and contrast if 2 assessments are selected<br>
+            • If window size is changed, recommend refresh the page to fix the chart (if necessary)
+        </div>
     </div>
-</div>
+
+
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!--Link the chart.js-->
     <script>
@@ -192,5 +167,5 @@
 
     </script>
 
-
+</div>
 {% endblock %}

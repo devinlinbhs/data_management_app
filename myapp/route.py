@@ -484,7 +484,16 @@ def table_information(all_start_student_list, all_end_student_list):
     
     return curve_information
 
-def get_table_student(curve_information, group):
+def get_table_student(curve_information, group, appliable_C = None):
+    """This function return the students and the information of the students so that they can be displayed in the table inside HTML
+    Note, it's taking in {{curve_information}}
+    
+        curve_information[0] is a list of year of the students (interested group)
+        curve_information[1] is a list of sql item e.g. [ <candidate 134>, <candidate 279> ]
+        curve_information[2] is a list of year of the students (uninterested group)
+        curve_information[3] is also a list of sql item e.g. [ <candidate 134>, <candidate 279> ]
+    """
+    
     curve_student = []
     for i in range(len(curve_information[1])):
         student = []
@@ -511,9 +520,27 @@ def get_table_student(curve_information, group):
         curve_student.append(student)
     if group == 'continue':
         curve_student.sort(key=lambda x: (x[1], x[0], x[4]))
+        
     else:
-        curve_student.sort(key=lambda x: (x[1], x[0], x[4]), reverse=True)
+        curve_student.sort(key=lambda x: (x[1], x[0], x[4]), reverse = True)
     return curve_student
+
+
+def get_line_name(ethnicity):
+    if len(ethnicity) == 0:
+        string = 'All Ethnicities'
+    
+    elif 'all' in ethnicity:
+        string = 'All Ethnicities'
+    
+    else:
+        string = ''
+        for i in range(len(ethnicity)):
+            string += f'{ethnicity[i]}'
+            if i != len(ethnicity)-1:
+                string += f' & '
+                
+    return string
 
 
 
@@ -561,11 +588,13 @@ def dropout_trend_graph():
     curve_A_student = None
     curve_B_student = None
     curve_C_student = None
+    line_A_name = None
+    line_B_name = None
+    line_C_name = None
     
     continue_rate_A, all_start_student_list_A, all_end_student_list_A = get_continue_rate(start_course, end_course, start_year, end_year, 
                                         ethnicity_A, all_start_student_list_A, all_end_student_list_A)
     curve_A_information = table_information(all_start_student_list_A, all_end_student_list_A)
-    
     
     """"curve_A_information[0] is a list of year of the students (interested group)
         curve_A_information[1] is a list of sql item e.g. [ <candidate 134>, <candidate 279> ]
@@ -574,29 +603,25 @@ def dropout_trend_graph():
         curve_A_information[3] is also a list of sql item e.g. [ <candidate 134>, <candidate 279> ]
     """
     curve_A_student = get_table_student(curve_A_information, group)
-    
-    
-        
-    
-    
-    
+    line_A_name = get_line_name(ethnicity_A)
     
     
     if appliable_B:
         continue_rate_B, all_start_student_list_B, all_end_student_list_B = get_continue_rate(start_course, end_course, start_year, end_year, 
                                         ethnicity_B, all_start_student_list_B, all_end_student_list_B)
         curve_B_information = table_information(all_start_student_list_B, all_end_student_list_B)
+        
         curve_B_student = get_table_student(curve_B_information, group)
+        line_B_name = get_line_name(ethnicity_B)
         
     if appliable_C:
         continue_rate_C, all_start_student_list_C, all_end_student_list_C = get_continue_rate(start_course, end_course, start_year, end_year, 
                                         ethnicity_C, all_start_student_list_C, all_end_student_list_C)
         curve_C_information = table_information(all_start_student_list_C, all_end_student_list_C)
+        
         curve_C_student = get_table_student(curve_C_information, group)
+        line_C_name = get_line_name(ethnicity_C)
 
-    
-    
-    
     
     labels = []
     for i in range(abs(end_year - start_year)+1):
@@ -616,6 +641,10 @@ def dropout_trend_graph():
                         curve_C_student = curve_C_student,
 
                         # Below is unnecesary but for testing
+                        line_A_name = line_A_name,
+                        line_B_name = line_B_name,
+                        line_C_name = line_C_name,
+                        
                         ethnicity_A = ethnicity_A,
                         ethnicity_B = ethnicity_B,
                         ethnicity_C = ethnicity_C,
