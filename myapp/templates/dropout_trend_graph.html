@@ -7,13 +7,16 @@
 
 
 {% block content %}
+<div class="loading"><div class="loading-text">Loading ~ </div></div>
 <!--All the contents go down here-->
-
-<div class="dropout_graph_container">
-    <div class="dropout_graph">
-        <canvas id="dropOutGraph"></canvas>
+<div class="dropout-graph-background">
+    <div class="dropout-graph-layout">
+        <div class="dropout-graph-container">
+            <div class="dropout-graph">
+                <canvas id="dropOutGraph"></canvas>
+            </div>
+        </div>
     </div>
-</div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -159,172 +162,146 @@
     });
     </script>
 
-
-
-<!-- A table that can show the data in a graph -->
-<h2>All student who took {{start_course}} and their status on {{end_course}}</h2>
-<table>
-    <tbody>
-        <thead>
-            <tr>
-                <th>Year when taken {{start_course}}</th>
-                <th>Status for {{end_course}} (dropped out/continued)</th>
-                <th>Name</th>
-                <th>Gender</th>
-                <th>Ethnicity</th>
-                <th>Attendance</th>
-            </tr>
-        </thead>
-
-        <!-- The information for curve A -->
-        {% if ethnicity_A|length == 0 %}
-            <tr>
-                <td colspan="6" class="td-title" style="background-color: #7ec3f2">All Ethnicities</td>
-            </tr>
-
-        {% elif 'all' in ethnicity_A %}
-            <tr>
-                <td colspan="6" class="td-title" style="background-color: #7ec3f2">All Ethnicities</td>
-            </tr>
-
-        {% else %}
-            <tr>
-                <td colspan="6" class="td-title" style="background-color: #7ec3f2">
-                    {% for i in range(ethnicity_A|length) %}
-                        {{ ethnicity_A[i] }}
-                        {% if i != ethnicity_A|length - 1 %} &{% endif %}
-                    {% endfor %}
-                </td>
-            </tr>
-            <!-- Example output: "NZ European & Maori & African & French & Others" -->
-        {% endif %}
-
-        {% for student in curve_A_information[1] %}
-        <tr>
-            <td>{{curve_A_information[0][loop.index -1]}}</td>
-            <td>Dropped out</td>
-            <!-- {{curve_A_information[1]}} is a list of sqlalchemy results -->
-            <td>{{curve_A_information[1][loop.index -1].name}}</td>
-            <td>{{curve_A_information[1][loop.index -1].gender}}</td>
-            <td>{{curve_A_information[1][loop.index -1].ethnicity}}</td>
-            <td>{{curve_A_information[1][loop.index -1].attendance}}</td>
-        </tr>
-        {% endfor %}
-
-        {% for student in curve_A_information[3] %}
-        <tr>
-            <td>{{curve_A_information[2][loop.index -1]}}</td>
-            <td>Continued</td>
-            <td>{{curve_A_information[3][loop.index -1].name}}</td>
-            <td>{{curve_A_information[3][loop.index -1].gender}}</td>
-            <td>{{curve_A_information[3][loop.index -1].ethnicity}}</td>
-            <td>{{curve_A_information[3][loop.index -1].attendance}}</td>
-        </tr>
-        {% endfor %}
-
-
-
-        <!-- If there is a curve B, then apply the same thing to curve B -->
-        {% if appliable_B %}
-            <!-- First show the title -->
-            {% if ethnicity_B|length == 0 %}
+    
+    <div class="dropout-table-container">
+        {{all_start_student_list_A}}
+    <!-- A table that can show the data in a graph -->
+    <h2>All student who took {{start_course}} and their status on {{end_course}}</h2>
+    <table>
+        <tbody>
+            <thead>
                 <tr>
-                    <td colspan="6" class="td-title" style="background-color: #ffa0b4">All Ethnicities</td>
+                    <th>Year when taken {{start_course}}</th>
+                    <th>Status for {{end_course}} (dropped out/continued)</th>
+                    <th>Name (unique id)</th>
+                    <th>Gender</th>
+                    <th>Ethnicity</th>
+                    <th>Attendance</th>
+                </tr>
+            </thead>
+
+            <!-- The information for curve A -->
+            {% if ethnicity_A|length == 0 %}
+                <tr>
+                    <td colspan="6" class="td-title" style="background-color: #92d0fad5">All Ethnicities</td>
                 </tr>
 
-            {% elif 'all' in ethnicity_B %}
+            {% elif 'all' in ethnicity_A %}
                 <tr>
-                    <td colspan="6" class="td-title" style="background-color: #ffa0b4">All Ethnicities</td>
+                    <td colspan="6" class="td-title" style="background-color: #92d0fad5">All Ethnicities</td>
                 </tr>
 
             {% else %}
                 <tr>
-                    <td colspan="6" class="td-title" style="background-color: #ffa0b4">
-                        {% for i in range(ethnicity_B|length) %}
-                            {{ ethnicity_B[i] }}
-                            {% if i != ethnicity_B|length - 1 %} &{% endif %}
+                    <td colspan="6" class="td-title" style="background-color: #92d0fad5">
+                        {% for i in range(ethnicity_A|length) %}
+                            {{ ethnicity_A[i] }}
+                            {% if i != ethnicity_A|length - 1 %} &{% endif %}
                         {% endfor %}
                     </td>
                 </tr>
                 <!-- Example output: "NZ European & Maori & African & French & Others" -->
             {% endif %}
 
-            {% for student in curve_B_information[1] %}
-            <tr>
-                <td>{{curve_B_information[0][loop.index -1]}}</td>
-                <td>Dropped out</td>
-                <!-- {{curve_B_information[1]}} is a list of sqlalchemy results -->
-                <td>{{curve_B_information[1][loop.index -1].name}}</td>
-                <td>{{curve_B_information[1][loop.index -1].gender}}</td>
-                <td>{{curve_B_information[1][loop.index -1].ethnicity}}</td>
-                <td>{{curve_B_information[1][loop.index -1].attendance}}</td>
-            </tr>
-            {% endfor %}
+            <!--curve_A_information[0] is a list of year of the students (interested group)
+            curve_A_information[1] is a list of sql item e.g. [ <candidate 134>, <candidate 279> ]
 
-            {% for student in curve_B_information[3] %}
-            <tr>
-                <td>{{curve_B_information[2][loop.index -1]}}</td>
-                <td>Continued</td>
-                <td>{{curve_B_information[3][loop.index -1].name}}</td>
-                <td>{{curve_B_information[3][loop.index -1].gender}}</td>
-                <td>{{curve_B_information[3][loop.index -1].ethnicity}}</td>
-                <td>{{curve_B_information[3][loop.index -1].attendance}}</td>
-            </tr>
-            {% endfor %}
-        {% endif %}
-
-        <!-- If there is a curve C, then apply the same thing to curve C -->
-        {% if appliable_C %}
-            <!-- Get the title for curve C-->
-            {% if ethnicity_C|length == 0 %}
+            curve_A_information[2] is a list of year of the students (uninterested group)
+            curve_A_information[3] is also a list of sql item e.g. [ <candidate 134>, <candidate 279> ]
+            -->
+            
+            {% for student in curve_A_student %}
                 <tr>
-                    <td colspan="6" class="td-title" style="background-color: #ffc389">All Ethnicities</td>
+                    <td>{{student[0]}}</td>
+                    <td>{{student[1]}}</td>
+                    <td>{{student[2]}}</td>
+                    <td>{{student[3]}}</td>
+                    <td>{{student[4]}}</td>
+                    <td>{{student[5]}}</td>
                 </tr>
+            {% endfor %}
 
-                {% elif 'all' in ethnicity_C %}
+
+
+            <!-- If there is a curve B, then apply the same thing to curve B -->
+            {% if appliable_B %}
+                <!-- First show the title -->
+                {% if ethnicity_B|length == 0 %}
                     <tr>
-                        <td colspan="6" class="td-title" style="background-color: #ffc389">All Ethnicities</td>
+                        <td colspan="6" class="td-title" style="background-color: #ffa0b4">All Ethnicities</td>
+                    </tr>
+
+                {% elif 'all' in ethnicity_B %}
+                    <tr>
+                        <td colspan="6" class="td-title" style="background-color: #ffa0b4">All Ethnicities</td>
                     </tr>
 
                 {% else %}
                     <tr>
-                        <td colspan="6" class="td-title" style="background-color: #ffc389">
-                            {% for i in range(ethnicity_C|length) %}
-                                {{ ethnicity_C[i] }}
-                                {% if i != ethnicity_C|length - 1 %} &{% endif %}
+                        <td colspan="6" class="td-title" style="background-color: #ffa0b4">
+                            {% for i in range(ethnicity_B|length) %}
+                                {{ ethnicity_B[i] }}
+                                {% if i != ethnicity_B|length - 1 %} &{% endif %}
                             {% endfor %}
                         </td>
                     </tr>
                     <!-- Example output: "NZ European & Maori & African & French & Others" -->
+                {% endif %}
+
+                {% for student in curve_B_student %}
+                    <tr>
+                        <td>{{student[0]}}</td>
+                        <td>{{student[1]}}</td>
+                        <td>{{student[2]}}</td>
+                        <td>{{student[3]}}</td>
+                        <td>{{student[4]}}</td>
+                        <td>{{student[5]}}</td>
+                    </tr>
+                {% endfor %}
+
             {% endif %}
 
+            <!-- If there is a curve C, then apply the same thing to curve C -->
+            {% if appliable_C %}
+                <!-- Get the title for curve C-->
+                {% if ethnicity_C|length == 0 %}
+                    <tr>
+                        <td colspan="6" class="td-title" style="background-color: #ffc389">All Ethnicities</td>
+                    </tr>
 
-            {% for student in curve_C_information[1] %}
-            <tr>
-                <td>{{curve_C_information[0][loop.index -1]}}</td>
-                <td>Dropped out</td>
-                <!-- {{curve_B_information[1]}} is a list of sqlalchemy results -->
-                <td>{{curve_C_information[1][loop.index -1].name}}</td>
-                <td>{{curve_C_information[1][loop.index -1].gender}}</td>
-                <td>{{curve_C_information[1][loop.index -1].ethnicity}}</td>
-                <td>{{curve_C_information[1][loop.index -1].attendance}}</td>
-            </tr>
-            {% endfor %}
+                    {% elif 'all' in ethnicity_C %}
+                        <tr>
+                            <td colspan="6" class="td-title" style="background-color: #ffc389">All Ethnicities</td>
+                        </tr>
 
-            {% for student in curve_C_information[3] %}
-            <tr>
-                <td>{{curve_C_information[2][loop.index -1]}}</td>
-                <td>Continued</td>
-                <td>{{curve_C_information[3][loop.index -1].name}}</td>
-                <td>{{curve_C_information[3][loop.index -1].gender}}</td>
-                <td>{{curve_C_information[3][loop.index -1].ethnicity}}</td>
-                <td>{{curve_C_information[3][loop.index -1].attendance}}</td>
-            </tr>
-            {% endfor %}
-        {% endif %}
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="td-title" style="background-color: #ffc389">
+                                {% for i in range(ethnicity_C|length) %}
+                                    {{ ethnicity_C[i] }}
+                                    {% if i != ethnicity_C|length - 1 %} &{% endif %}
+                                {% endfor %}
+                            </td>
+                        </tr>
+                        <!-- Example output: "NZ European & Maori & African & French & Others" -->
+                {% endif %}
 
-    </tbody>
-</table>
 
+                {% for student in curve_C_student %}
+                    <tr>
+                        <td>{{student[0]}}</td>
+                        <td>{{student[1]}}</td>
+                        <td>{{student[2]}}</td>
+                        <td>{{student[3]}}</td>
+                        <td>{{student[4]}}</td>
+                        <td>{{student[5]}}</td>
+                    </tr>
+                {% endfor %}
+            {% endif %}
+
+        </tbody>
+    </table>
+    </div>
+</div>
 
 {% endblock %}

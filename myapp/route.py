@@ -468,6 +468,9 @@ def table_information(all_start_student_list, all_end_student_list):
     # "student_of_interest_year" indicate which year they took the starting subject
     # "student_of_interest_result" is the result from sqlalchemy with the input of those "student_of_interest"
     
+    # all_start_student_list example:[ [33, 2021], [15, 2021], [24, 2021], [123, 2021] ]
+    # First item in each list is unique id, second one is year they belong to
+    
     student_of_interest = [student[0] for student in all_start_student_list if student not in all_end_student_list]
     student_of_interest_year = [student[1] for student in all_start_student_list if student not in all_end_student_list]
     student_of_interest_result = models.Candidate.query.filter(models.Candidate.id.in_(student_of_interest)).all()
@@ -477,7 +480,40 @@ def table_information(all_start_student_list, all_end_student_list):
     student_not_interest_year = [student[1] for student in all_end_student_list]
     student_not_interest_result = models.Candidate.query.filter(models.Candidate.id.in_(student_not_interest)).all()
     
-    return [student_of_interest_year, student_of_interest_result, student_not_interest_year, student_not_interest_result]
+    curve_information = [student_of_interest_year, student_of_interest_result, student_not_interest_year, student_not_interest_result]
+    
+    return curve_information
+
+def get_table_student(curve_information, group):
+    curve_student = []
+    for i in range(len(curve_information[1])):
+        student = []
+        student.append(curve_information[0][i])
+        student.append('Dropped out')
+        
+        student.append(curve_information[1][i].name)
+        student.append(curve_information[1][i].gender)
+        student.append(curve_information[1][i].ethnicity)
+        student.append(curve_information[1][i].attendance)
+        
+        curve_student.append(student)
+        
+    for i in range(len(curve_information[3])):
+        student = []
+        student.append(curve_information[2][i])
+        student.append('Continued')
+        
+        student.append(curve_information[3][i].name)
+        student.append(curve_information[3][i].gender)
+        student.append(curve_information[3][i].ethnicity)
+        student.append(curve_information[3][i].attendance)
+        
+        curve_student.append(student)
+    if group == 'continue':
+        curve_student.sort(key=lambda x: (x[1], x[0], x[4]))
+    else:
+        curve_student.sort(key=lambda x: (x[1], x[0], x[4]), reverse=True)
+    return curve_student
 
 
 
@@ -522,23 +558,41 @@ def dropout_trend_graph():
     all_end_student_list_A = []
     all_end_student_list_B = []
     all_end_student_list_C = []
-    curve_A_information = None
-    curve_B_information = None
-    curve_C_information = None
+    curve_A_student = None
+    curve_B_student = None
+    curve_C_student = None
     
     continue_rate_A, all_start_student_list_A, all_end_student_list_A = get_continue_rate(start_course, end_course, start_year, end_year, 
                                         ethnicity_A, all_start_student_list_A, all_end_student_list_A)
     curve_A_information = table_information(all_start_student_list_A, all_end_student_list_A)
     
+    
+    """"curve_A_information[0] is a list of year of the students (interested group)
+        curve_A_information[1] is a list of sql item e.g. [ <candidate 134>, <candidate 279> ]
+
+        curve_A_information[2] is a list of year of the students (uninterested group)
+        curve_A_information[3] is also a list of sql item e.g. [ <candidate 134>, <candidate 279> ]
+    """
+    curve_A_student = get_table_student(curve_A_information, group)
+    
+    
+        
+    
+    
+    
+    
+    
     if appliable_B:
         continue_rate_B, all_start_student_list_B, all_end_student_list_B = get_continue_rate(start_course, end_course, start_year, end_year, 
                                         ethnicity_B, all_start_student_list_B, all_end_student_list_B)
         curve_B_information = table_information(all_start_student_list_B, all_end_student_list_B)
+        curve_B_student = get_table_student(curve_B_information, group)
         
     if appliable_C:
         continue_rate_C, all_start_student_list_C, all_end_student_list_C = get_continue_rate(start_course, end_course, start_year, end_year, 
                                         ethnicity_C, all_start_student_list_C, all_end_student_list_C)
         curve_C_information = table_information(all_start_student_list_C, all_end_student_list_C)
+        curve_C_student = get_table_student(curve_C_information, group)
 
     
     
@@ -557,9 +611,9 @@ def dropout_trend_graph():
                         continue_rate_C = continue_rate_C,
                         labels = labels,
                         
-                        curve_A_information = curve_A_information,
-                        curve_B_information = curve_B_information,
-                        curve_C_information = curve_C_information,
+                        curve_A_student = curve_A_student,
+                        curve_B_student = curve_B_student,
+                        curve_C_student = curve_C_student,
 
                         # Below is unnecesary but for testing
                         ethnicity_A = ethnicity_A,
@@ -570,4 +624,5 @@ def dropout_trend_graph():
                         end_course = end_course,
                         start_year = start_year,
                         end_year = end_year,
+
 )
