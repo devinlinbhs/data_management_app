@@ -7,10 +7,13 @@
 
 
 {% block content %}
-<div class="loading"><div class="loading-text">Loading ~ </div></div>
+<div class="loading">
+    <div class="loading-text">Loading ~ </div>
+</div>
 
-<div class = "home-background">
-    <div class = "home-container-left">
+<div class="home-background">
+    <div class="home-container-left">
+        <!--Descriptions on the subject_trend features-->
         <a href="{{url_for('subject_trend_filter1')}}">
             <img src="/static/subject_trend_graph.png" class="home-image">
         </a>
@@ -18,15 +21,16 @@
         The graph will contain the grades that students get in their SELECTED assessment over a SELECTED time interval
     </div>
 
-    <div class = "home-container-right">
+    <div class="home-container-right">
+        <!--Descriptions on the dropout_trend features-->
         <a href="{{url_for('dropout_trend_filter')}}">
             <img src="/static/dropout_trend_graph.png" class="home-image">
         </a>
 
         Click the image to use dropout trend filters to generate graphs:<br><br>
-        The graph will contain the continue/dropout rates of students in the SELECTED course over a SELECTED time interval
+        The graph will contain the continue/dropout rates of students in the SELECTED course over a SELECTED time
+        interval
     </div>
 
 </div>
 {% endblock %}
-    

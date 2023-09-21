@@ -7,37 +7,44 @@
 
 
 {% block content %}
-<div class="loading"><div class="loading-text">Loading ~ </div></div>
+<div class="loading">
+    <div class="loading-text">Loading ~ </div>
+</div>
 
-<form action="/subject_trend_graph", method="post" class="subject-trend-filter-background">
+<form action="/subject_trend_graph" , method="post" class="subject-trend-filter-background">
     <div class="subject-trend-filter-container2">
-    <div class="subject-trend-filter-layout1">
-        <div class="subject-trend-filter-title">Subject Trend Filter</div>
-            The graph will contain the grades that students get in their SELECTED assessment over a SELECTED time interval:<div class="note"><br><br>
-            • Please TICK the box for whether you need to generate a second graph<br>
-            • Please SELECT the interested ethnicites of the students<br> (note: you can multi-select ethnicites by using "Ctrl + Click")</div><br><br>
-    
-        <div class="subject-trend-filter-layout4">
+        <div class="subject-trend-filter-layout1">
+            <!-- Contents that's on top-->
+            <div class="subject-trend-filter-title">Subject Trend Filter</div>
+            The graph will contain the grades that students get in their SELECTED assessment over a SELECTED time
+            interval:<div class="note"><br><br>
+                • Please TICK the box for whether you need to generate a second graph<br>
+                • Please SELECT the interested ethnicites of the students<br> (note: you can multi-select ethnicites by
+                using "Ctrl + Click")</div><br><br>
+
+            <!-- Second layers of content, the "standards" selection-->
+            <div class="subject-trend-filter-layout4">
                 <div class="subject-trend-filter-layout5">
 
                     <div class="subject-trend-filter-layout6">
                         <label class="subject-trend-filter-label">Standard - Curve 1</label>
                         <select name="standard_A">
                             {% for result in session['course_list'] %}
-                                <option value="{{result}}">{{result}}</option>
+                            <option value="{{result}}">{{result}}</option>
                             {% endfor %}
                         </select>
                     </div>
-                    
+
 
                     <div class="subject-trend-filter-layout6">
-                        <label class="subject-trend-filter-label">Standard - Curve 2 
-                            <input class="styled-checkbox" type="checkbox" name="appliable_B" value="appliable" default = 'nothing'>
+                        <label class="subject-trend-filter-label">Standard - Curve 2
+                            <input class="styled-checkbox" type="checkbox" name="appliable_B" value="appliable"
+                                default='nothing'>
                             <span class="tick"></span>
                         </label>
                         <select name="standard_B">
                             {% for result in session['course_list'] %}
-                                <option value="{{result}}">{{result}}</option>
+                            <option value="{{result}}">{{result}}</option>
                             {% endfor %}
                         </select>
                     </div>
@@ -45,7 +52,7 @@
                 </div>
                 <!--The first space-between flex box ends here-->
 
-
+                <!-- Third layers of content, the "ethnicity" selection-->
                 <div class="subject-trend-filter-layout5">
                     <div class="subject-trend-filter-layout6">
                         <br>
@@ -73,11 +80,11 @@
                             </select>
                         </details>
                     </div>
-                    
+
                     <div class="subject-trend-filter-layout6">
                         <br>
                         <label class="subject-trend-filter-label">Curve 2 Ethnicity Category</label>
-                        <details >
+                        <details>
                             <summary class="multiple-dropdown">Select Ethnicities - Curve 2</summary>
                             <select class="multiple-select" name="ethnicity_B" multiple>
                                 <option value="all">All - (default)</option>
@@ -99,13 +106,13 @@
                                 <option value="Others">Others</option>
                             </select>
                         </details>
-                    </div> 
+                    </div>
                 </div>
                 <!--The second space-between flex box ends here-->
                 <br>
                 <input class="subject-trend-filter-button" type="submit" value="Done !">
             </div>
-    </div>
+        </div>
     </div>
     <!--Data can be retreated in {route.py} by {request.form['name']}-->
 </form>

@@ -7,7 +7,9 @@
 
 
 {% block content %}
-<div class="loading"><div class="loading-text">Loading ~ </div></div>
+<div class="loading">
+    <div class="loading-text">Loading ~ </div>
+</div>
 <!--All the contents go down here-->
 <div class="dropout-trend-graph-background">
     <div class="dropout-trend-graph-layout">
@@ -16,9 +18,12 @@
                 <canvas id="dropOutGraph"></canvas>
             </div>
             <br>
-            Note:<br>
-            • If a point/graph is missing in a specific year, that means data is missing for that specific year<br>
-            • It is recommended to choose different ethnicities to compare and contrast if more than 2 ethnicities are selected<br>
+            <!--Descriptions-->
+            <p style="width: 100%; height: 0">Note:</p><br>
+            <p style="color:#e4ec10da; width: 100%; height: 0">• If a point/graph is missing in a specific year, that means
+                data is missing for that specific year</p><br>
+            • It is recommended to choose different ethnicities to compare and contrast if more than 2 ethnicities are
+            selected<br>
             • If window size is changed, recommend refresh the page to fix the chart (if necessary)
         </div>
     </div>
@@ -27,183 +32,191 @@
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!--Link the chart.js-->
     <script>
+        let graph = document.getElementById('dropOutGraph').getContext('2d');
+        // Define the chart
+        Chart.defaults.font.size = 16;
+        // Set font size
 
-    let graph = document.getElementById('dropOutGraph').getContext('2d');
-    Chart.defaults.font.size = 16;
+        let continueRate_A = JSON.parse('{{ continue_rate_A|tojson }}');
+        let continueRate_B = JSON.parse('{{ continue_rate_B|tojson }}');
+        let continueRate_C = JSON.parse('{{ continue_rate_C|tojson }}');
+        // Data graphed on the line chart
 
-    let continueRate_A = JSON.parse('{{ continue_rate_A|tojson }}');
-    let continueRate_B = JSON.parse('{{ continue_rate_B|tojson }}');
-    let continueRate_C = JSON.parse('{{ continue_rate_C|tojson }}');
-    
+        let group = JSON.parse('{{ group|tojson }}');
+        let labels = JSON.parse('{{ labels|tojson }}'); // used as x-labels
+        let start_year = JSON.parse('{{ start_year|tojson }}');
 
-    let group = JSON.parse('{{ group|tojson }}');
-    let labels = JSON.parse('{{ labels|tojson }}');
-    let start_year = JSON.parse('{{ start_year|tojson }}');
+        let curve_B = JSON.parse('{{ appliable_B|tojson }}');
+        let curve_C = JSON.parse('{{ appliable_C|tojson }}');
 
-    let curve_B = JSON.parse('{{ appliable_B|tojson }}');
-    let curve_C = JSON.parse('{{ appliable_C|tojson }}');
-
-    let line_A_name = JSON.parse('{{ line_A_name|tojson }}');
-    let line_B_name = JSON.parse('{{ line_B_name|tojson }}');
-    let line_C_name = JSON.parse('{{ line_C_name|tojson }}');
+        let line_A_name = JSON.parse('{{ line_A_name|tojson }}');
+        let line_B_name = JSON.parse('{{ line_B_name|tojson }}');
+        let line_C_name = JSON.parse('{{ line_C_name|tojson }}');
 
 
-    let title;
-    
-    if (group =='continue'){
-        title = 'Continue Rate Trend Graph'}
-    else{
-        title = 'Dropout Rate Trend Graph'};
+        let title; // used in the graph title
 
-    let datasets = [];
-    if (group =='continue'){
-        datasets.push({
-                        label: line_A_name,
-                        data: continueRate_A,
-                        borderWidth: 3,
-                        hoverBorderWidth:5,
-                        hoverBorderColor: '#238fb6'
-                    })
-                }
-    else{
-        let dropoutRates_A = continueRate_A.map((value) => (value !== null ? 100 - value : null));
-        datasets.push({
-                        label: line_A_name,
-                        data: dropoutRates_A,
-                        borderWidth: 3,
-                        hoverBorderWidth:5,
-                        hoverBorderColor: '#238fb6'
-                    })
+        if (group == 'continue') {
+            title = 'Continue Rate Trend Graph'
+        }
+        else {
+            title = 'Dropout Rate Trend Graph'
         };
 
-    if (curve_B){
-        if (group =='continue'){
+        let datasets = [];
+        if (group == 'continue') {
             datasets.push({
-                            label: line_B_name,
-                            data: continueRate_B,
-                            borderWidth: 3,
-                            hoverBorderWidth:5,
-                            hoverBorderColor: '#238fb6'
-                        })
-                    }
-        else{
-            let dropoutRates_B = continueRate_B.map((value) => (value !== null ? 100 - value : null));
+                label: line_A_name, //name of the line
+                data: continueRate_A, //display data
+                borderWidth: 3,
+                hoverBorderWidth: 5,
+                hoverBorderColor: '#238fb6'
+            })
+        }
+        else {
+            let dropoutRates_A = continueRate_A.map((value) => (value !== null ? 100 - value : null));
+            // dropout is opposite of continue, so it's 100 - continue
             datasets.push({
-                            label: line_B_name,
-                            data: dropoutRates_B,
-                            borderWidth: 3,
-                            hoverBorderWidth:5,
-                            hoverBorderColor: '#238fb6'
-                        })
+                label: line_A_name,
+                data: dropoutRates_A,
+                borderWidth: 3,
+                hoverBorderWidth: 5,
+                hoverBorderColor: '#238fb6'
+            })
+        };
+
+        // same thing applied to curve B and curve C
+        if (curve_B) {
+            if (group == 'continue') {
+                datasets.push({
+                    label: line_B_name,
+                    data: continueRate_B,
+                    borderWidth: 3,
+                    hoverBorderWidth: 5,
+                    hoverBorderColor: '#238fb6'
+                })
             }
-    };
-
-
-    if (curve_C){
-        if (group =='continue'){
-            datasets.push({
-                            label: line_C_name,
-                            data: continueRate_C,
-                            borderWidth: 3,
-                            hoverBorderWidth:5,
-                        })
-                    }
-        else{
-            let dropoutRates_C = continueRate_C.map((value) => (value !== null ? 100 - value : null));
-            datasets.push({
-                            label: line_C_name,
-                            data: dropoutRates_C,
-                            borderWidth: 3,
-                            hoverBorderWidth:5,
-                        })
+            else {
+                let dropoutRates_B = continueRate_B.map((value) => (value !== null ? 100 - value : null));
+                datasets.push({
+                    label: line_B_name,
+                    data: dropoutRates_B,
+                    borderWidth: 3,
+                    hoverBorderWidth: 5,
+                    hoverBorderColor: '#238fb6'
+                })
             }
-    };
+        };
 
 
-    let testingGraph = new Chart(graph, 
-    {type: 'line',
-    data: {labels: labels,
-        datasets: datasets},
-    options: {
-        //intersection with mode index can give labels for both point at the same time//
-        interaction: {
-            mode: 'index',
-            intersect: false,
-        },
-        
-        plugins: {
-            title: {
-                display: true,
-                text: title,
-                font: {
-                    size: 30
-                }
-            },
-            legend:{
-                labels:{
-                    font:{
-                        size:10
-                    }
+        if (curve_C) {
+            if (group == 'continue') {
+                datasets.push({
+                    label: line_C_name,
+                    data: continueRate_C,
+                    borderWidth: 3,
+                    hoverBorderWidth: 5,
+                })
+            }
+            else {
+                let dropoutRates_C = continueRate_C.map((value) => (value !== null ? 100 - value : null));
+                datasets.push({
+                    label: line_C_name,
+                    data: dropoutRates_C,
+                    borderWidth: 3,
+                    hoverBorderWidth: 5,
+                })
+            }
+        };
+
+
+        let testingGraph = new Chart(graph,
+            {
+                type: 'line', // set the graph to line graph
+                data: {
+                    labels: labels, // set the x-axis
+                    datasets: datasets // graph the data
                 },
-            }
-        },
-        scales:{
-                x:{
-                    ticks:{
-                        callback: function (value){
-                            return value + start_year;// Extract the year part from the label and return it
+                options: {
+                    //intersection with mode index can give labels for both point at the same time//
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: title, // title is sat here
+                            font: {
+                                size: 30
+                            }
+                        },
+                        legend: {
+                            labels: {
+                                font: {
+                                    size: 10 // display on the top, of what each line is
+                                }
                             },
                         }
                     },
-                y:{
-                    ticks:{
-                        callback: function (value){
-                            return value + '%'; // Add the percentage symbol to the labels
-                            },
+                    scales: {
+                        x: {
+                            ticks: {
+                                callback: function (value) {
+                                    return value + start_year;// Extract the year part from the label and return it
+                                },
+                            }
                         },
-                        suggestedMin: 0, // minimum 0%
-                        suggestedMax: 100 // maximum 100%
-                    }
-                    
-                }
-    },
+                        y: {
+                            ticks: {
+                                callback: function (value) {
+                                    return value + '%'; // Add the percentage symbol to the labels
+                                },
+                            },
+                            suggestedMin: 0, // minimum 0%
+                            suggestedMax: 100 // maximum 100%
+                        }
 
-    
-    });
+                    }
+                },
+
+
+            });
     </script>
 
-    
+
     <div class="dropout-table-container">
         {{all_start_student_list_A}}
-    <!-- A table that can show the data in a graph -->
-    <h2>All student who took {{start_course}} and their status on {{end_course}}</h2>
-    <table>
-        <tbody>
-            <thead>
+        <!-- A table that can show the data in a graph -->
+        <h2>All student who took {{start_course}} and whether they are doing {{end_course}}</h2>
+        <table>
+            <tbody>
+                <thead>
+                    <tr><!--All the headers-->
+                        <th>Year when taken {{start_course}}</th>
+                        <th>Status for {{end_course}} (dropped out/continued)</th>
+                        <th>Name (unique id)</th>
+                        <th>Gender</th>
+                        <th>Ethnicity</th>
+                        <th>Attendance</th>
+                    </tr>
+                </thead>
+
+                <!-- The information for curve A -->
                 <tr>
-                    <th>Year when taken {{start_course}}</th>
-                    <th>Status for {{end_course}} (dropped out/continued)</th>
-                    <th>Name (unique id)</th>
-                    <th>Gender</th>
-                    <th>Ethnicity</th>
-                    <th>Attendance</th>
+                    <td colspan="6" class="td-title" style="background-color: #92d0fad5">{{line_A_name}}</td>
                 </tr>
-            </thead>
-
-            <!-- The information for curve A -->
-            <tr>
-                <td colspan="6" class="td-title" style="background-color: #92d0fad5">{{line_A_name}}</td>
-            </tr>
 
 
-            <!--curve_A_information[0] is a list of year of the students (interested group)
-            curve_A_information[1] is a list of sql item e.g. [ <candidate 134>, <candidate 279> ]
+                <!--curve_A_information[0] is a list of year of the students (interested group)
+                curve_A_information[1] is a list of sql item e.g. [ <candidate 134>, <candidate 279> ]
 
-            curve_A_information[2] is a list of year of the students (uninterested group)
-            curve_A_information[3] is also a list of sql item e.g. [ <candidate 134>, <candidate 279> ]
-            -->
-            
-            {% for student in curve_A_student %}
+                curve_A_information[2] is a list of year of the students (uninterested group)
+                curve_A_information[3] is also a list of sql item e.g. [ <candidate 134>, <candidate 279> ]
+                -->
+
+                {% for student in student_list_A %}
                 <tr>
                     <td>{{student[0]}}</td>
                     <td>{{student[1]}}</td>
@@ -212,52 +225,58 @@
                     <td>{{student[4]}}</td>
                     <td>{{student[5]}}</td>
                 </tr>
-            {% endfor %}
+                {% endfor %}
 
 
 
-            <!-- If there is a curve B, then apply the same thing to curve B -->
-            {% if appliable_B %}
+                <!-- If there is a curve B, then apply the same thing to curve B -->
+                {% if appliable_B %}
                 <!-- First show the title -->
                 <tr>
                     <td colspan="6" class="td-title" style="background-color: #ffa0b4">{{line_B_name}}</td>
                 </tr>
 
-                {% for student in curve_B_student %}
-                    <tr>
-                        <td>{{student[0]}}</td>
-                        <td>{{student[1]}}</td>
-                        <td>{{student[2]}}</td>
-                        <td>{{student[3]}}</td>
-                        <td>{{student[4]}}</td>
-                        <td>{{student[5]}}</td>
-                    </tr>
-                {% endfor %}
-
-            {% endif %}
-
-            <!-- If there is a curve C, then apply the same thing to curve C -->
-            {% if appliable_C %}
-                <!-- Get the title for curve C-->
+                {% for student in student_list_B %}
                 <tr>
-                    <td colspan="6" class="td-title" style="background-color: #ffc389">{{line_C_name}}</td>
+                    <td>{{student[0]}}</td>
+                    <td>{{student[1]}}</td>
+                    <td>{{student[2]}}</td>
+                    <td>{{student[3]}}</td>
+                    <td>{{student[4]}}</td>
+                    <td>{{student[5]}}</td>
                 </tr>
-
-                {% for student in curve_C_student %}
-                    <tr>
-                        <td>{{student[0]}}</td>
-                        <td>{{student[1]}}</td>
-                        <td>{{student[2]}}</td>
-                        <td>{{student[3]}}</td>
-                        <td>{{student[4]}}</td>
-                        <td>{{student[5]}}</td>
-                    </tr>
                 {% endfor %}
 
-            {% endif %}
+                {% endif %}
 
-        </tbody>
-    </table>
+                <!-- If there is a curve C, then apply the same thing to curve C -->
+                {% if appliable_C %}
+                <!-- Get the title for curve C-->
+                    {% if appliable_B %}
+                        <tr>
+                            <td colspan="6" class="td-title" style="background-color: #ffc389">{{line_C_name}}</td>
+                        </tr>
+                    {% else %}
+                        <tr>
+                            <td colspan="6" class="td-title" style="background-color: #ffa0b4">{{line_C_name}}</td>
+                        </tr>
+                    {% endif %}
+
+                {% for student in student_list_C %}
+                <tr>
+                    <td>{{student[0]}}</td>
+                    <td>{{student[1]}}</td>
+                    <td>{{student[2]}}</td>
+                    <td>{{student[3]}}</td>
+                    <td>{{student[4]}}</td>
+                    <td>{{student[5]}}</td>
+                </tr>
+                {% endfor %}
+
+                {% endif %}
+
+            </tbody>
+        </table>
     </div>
 </div>
 

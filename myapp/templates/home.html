@@ -3,32 +3,35 @@
 {% block title %}
 <title>Home</title>
 {% endblock %}
-    
+
 
 {% block content %}
 <!-- Home page contents -->
-<div class="loading"><div class="loading-text">Loading ~ </div></div>
+<div class="loading">
+    <div class="loading-text">Loading ~ </div>
+</div>
 
-<div class = "home-background">
+<div class="home-background">
 
     <!-- Left container -->
-    <div class = "home-container-left">
+    <div class="home-container-left">
         <!-- Image link to Johnny' websites, but not connected yet-->
         <a href="{{url_for('home')}}">
-            <img src="/static/johnny_bar_graph.png" class="home-image" style = "opacity: 0.8;">
+            <img src="/static/johnny_bar_graph.png" class="home-image" style="opacity: 0.8;">
         </a>
         Click the image to create GENERAL graphs by comparing Burnside Results VS Decile 8~10 Schools' Results:<br><br>
         This project is made by the other student....<br>
-        <p style="color:#eb3629">Not connected to current website yet, please be patient</p>
+        <p style="color:#e4ec10da">Not connected to current website yet, please be patient</p>
     </div>
 
     <!-- Right container-->
-    <div class = "home-container-right">
+    <div class="home-container-right">
         <!-- Image link to my websites (option.html) for users to choose what they want to do with my website -->
         <a href="{{url_for('option')}}">
             <img src="/static/devin_graph.png" class="home-image">
         </a>
-        Click the image to create SPECIFIC graphs related to Burnside's subjects (digital courses only) over years:<br><br>
+        Click the image to create SPECIFIC graphs related to Burnside's subjects (digital courses only) over
+        years:<br><br>
         • Graphs about student dropout rate on a subject over years <br>
         • Graphs about student performances on a subject over years
     </div>

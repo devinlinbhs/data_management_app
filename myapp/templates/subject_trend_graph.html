@@ -7,50 +7,62 @@
 
 
 {% block content %}
-<div class="loading"><div class="loading-text">Loading ~ </div></div>
-<div class="dropout-graph-background">
-<!-- Basically can use the similar CSS to the dropout graph as they have similar formats-->
+<div class="loading">
+    <div class="loading-text">Loading ~ </div>
+</div>
+<div class="dropout-trend-graph-background">
+    <!-- Basically can use the similar CSS to the dropout graph as they have similar formats-->
     <div class="subject-trend-graph-layout">
         <div class="subject-trend-graph-container">
-            <div class="dropout-graph">
+            <div class="dropout-trend-graph">
                 <canvas id="sujectTrendGraph"></canvas>
             </div>
+            <!--The bar graph is at the above tags
+            The information of the graph will be descibed and change in script
+            -->
             <br>
             Note:<br>
             • If the graph is blank in a specific year, that means data is missing for that specific year<br>
-            • It is recommended to choose different assessments to compare and contrast if 2 assessments are selected<br>
+            • It is recommended to choose different assessments to compare and contrast if 2 assessments are
+            selected<br>
             • If window size is changed, recommend refresh the page to fix the chart (if necessary)
         </div>
     </div>
 
 
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <!--Link the chart.js-->
+    <!--Link of the chart.js-->
     <script>
+        let graph = document.getElementById('sujectTrendGraph').getContext('2d');
+        // Define the chart
+        Chart.defaults.font.size = 16;
+        // Set font size
 
+        let title = JSON.parse('{{ title|tojson }}'); // used in the graph title
+        let labels = JSON.parse('{{ labels|tojson }}'); // used as x-labels
+        let stack_A = JSON.parse('{{ stack_A|tojson }}');
+        // the name list for stack when hovering over the bar
+        // like ["10DGT Comp Sci - E", "10DGT Comp Sci - M" ....]
+        let stack_B = JSON.parse('{{ stack_B|tojson }}');
 
+        let start_year = JSON.parse('{{ start_year|tojson }}');
+        // used for the x-ticks (what the labels are displayed as)
+        let grade_percentage_A = JSON.parse('{{ grade_percentage_A|tojson }}');
+        let grade_percentage_B = JSON.parse('{{ grade_percentage_B|tojson }}');
+        // These two are data being graphed on the bar chart
+        
 
-    let graph = document.getElementById('sujectTrendGraph').getContext('2d');
-    Chart.defaults.font.size = 16;
-
-    let title = JSON.parse('{{ title|tojson }}');
-    let labels = JSON.parse('{{ labels|tojson }}');
-    
-    let start_year = JSON.parse('{{ start_year|tojson }}');
-    let grade_percentage_A = JSON.parse('{{ grade_percentage_A|tojson }}');
-    let grade_percentage_B = JSON.parse('{{ grade_percentage_B|tojson }}');
-
-    let datasets = [{
-        label: 'Assessment1 - E',
-        data: grade_percentage_A[0],
-        borderWidth: 1,
-        hoverBorderWidth: 3,
-        hoverBorderColor: '#238fb6',
-        backgroundColor: '#ffd966',
-        stack: 'Assessment - 1'
+        let datasets = [{
+            label: stack_A[0], // name is displayed
+            data: grade_percentage_A[0], // how much I should graph
+            borderWidth: 1,
+            hoverBorderWidth: 3,
+            hoverBorderColor: '#238fb6',
+            backgroundColor: '#ffd966',
+            stack: 'Assessment - 1' // The stack that the data belong to, like percentage A goes to this
         },
         {
-            label: 'Assessment1 - M',
+            label: stack_A[1],
             data: grade_percentage_A[1],
             borderWidth: 1,
             hoverBorderWidth: 3,
@@ -59,16 +71,16 @@
             stack: 'Assessment - 1'
         },
         {
-            label: 'Assessment1 - A',
+            label: stack_A[2],
             data: grade_percentage_A[2],
             borderWidth: 1,
             hoverBorderWidth: 3,
             hoverBorderColor: '#238fb6',
-            backgroundColor: '#5ca017', 
+            backgroundColor: '#5ca017',
             stack: 'Assessment - 1'
         },
         {
-            label: 'Assessment1 - NA',
+            label: stack_A[3],
             data: grade_percentage_A[3],
             borderWidth: 1,
             hoverBorderWidth: 3,
@@ -77,93 +89,101 @@
             stack: 'Assessment - 1'
         }];
 
-    if (grade_percentage_B){
-        datasets.push(
-            {label: 'Assessment2 - E',
-            data: grade_percentage_B[0],
-            borderWidth: 1,
-            hoverBorderWidth:3,
-            hoverBorderColor: '#238fb6',
-            backgroundColor: '#f49717',
-            stack: 'Assessment - 2'
-            });
+        // If the second curve is activated
+        if (grade_percentage_B) {
+            datasets.push(
+                {
+                    label: stack_B[0],
+                    data: grade_percentage_B[0],
+                    borderWidth: 1,
+                    hoverBorderWidth: 3,
+                    hoverBorderColor: '#238fb6',
+                    backgroundColor: '#f49717',
+                    stack: 'Assessment - 2'
+                });
 
-        datasets.push(
-            {label: 'Assessment2 - M',
-            data: grade_percentage_B[1],
-            borderWidth: 1,
-            hoverBorderWidth:3,
-            hoverBorderColor: '#238fb6',
-            backgroundColor: '#3c78d8',
-            stack: 'Assessment - 2'
-            });
+            datasets.push(
+                {
+                    label: stack_B[1],
+                    data: grade_percentage_B[1],
+                    borderWidth: 1,
+                    hoverBorderWidth: 3,
+                    hoverBorderColor: '#238fb6',
+                    backgroundColor: '#3c78d8',
+                    stack: 'Assessment - 2'
+                });
 
-        datasets.push(
-            {label: 'Assessment2 - A',
-            data: grade_percentage_B[2],
-            borderWidth: 1,
-            hoverBorderWidth:3,
-            hoverBorderColor: '#238fb6',
-            backgroundColor: '#38761d',
-            stack: 'Assessment - 2'
-            });
+            datasets.push(
+                {
+                    label: stack_B[2],
+                    data: grade_percentage_B[2],
+                    borderWidth: 1,
+                    hoverBorderWidth: 3,
+                    hoverBorderColor: '#238fb6',
+                    backgroundColor: '#38761d',
+                    stack: 'Assessment - 2'
+                });
 
-        datasets.push(
-            {label: 'Assessment2 - NA',
-            data: grade_percentage_B[3],
-            borderWidth: 1,
-            hoverBorderWidth:3,
-            hoverBorderColor: '#238fb6',
-            backgroundColor: '#cc0000',
-            stack: 'Assessment - 2'}
-        );
-    }
-
-    let testingGraph = new Chart(graph, 
-    {type: 'bar',
-    data: {labels: labels,
-            datasets: datasets},
-
-
-    options: {
-        //intersection with mode index can give labels for both point at the same time//
-
-        plugins: {
-            title: {
-                display: true,
-                text: title,
-                font: {
-                    size: 20
+            datasets.push(
+                {
+                    label: stack_B[3],
+                    data: grade_percentage_B[3],
+                    borderWidth: 1,
+                    hoverBorderWidth: 3,
+                    hoverBorderColor: '#238fb6',
+                    backgroundColor: '#cc0000',
+                    stack: 'Assessment - 2'
                 }
-            },
-            legend:{
-                labels:{
-                    font:{
-                        size:10
-                    }
+            );
+        }
+
+        let testingGraph = new Chart(graph,
+            {
+                type: 'bar', // set the type of graph
+                data: {
+                    labels: labels, // set the x-labels
+                    datasets: datasets // display all the data that's in the datasets (edited above)
                 },
-            }
-        },
-        scales:{
-            x:{
-                ticks:{
-                    callback: function (value){
-                        return value + start_year;// Extract the year part from the label and return it
+
+
+                options: {
+
+                    plugins: {
+                        title: {
+                            display: true,
+                            text: title,
+                            font: {
+                                size: 20
+                            }
                         },
-                    }
-                },
-            y:{
-                ticks:{
-                    callback: function (value){
-                        return value + '%'; // Add the percentage symbol to the labels
-                        },
+                        legend: {
+                            labels: {
+                                font: {
+                                    size: 10
+                                }
+                            },
+                        }
                     },
-                    suggestedMin: 0, // minimum 0%
-                    suggestedMax: 100 // maximum 100%
+                    scales: {
+                        x: {
+                            ticks: {
+                                callback: function (value) {
+                                    return value + start_year;// Extract the year part from the label and return it
+                                },
+                            }
+                        },
+                        y: {
+                            ticks: {
+                                callback: function (value) {
+                                    return value + '%'; // Add the percentage symbol to the labels
+                                },
+                            },
+                            suggestedMin: 0, // minimum 0%
+                            suggestedMax: 100 // maximum 100%
+                        }
+                    }
                 }
-            }
-    }
-    });
+            });
 
     </script>
 

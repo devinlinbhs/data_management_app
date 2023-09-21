@@ -1,6 +1,7 @@
 from myapp.route import db
 # db is defined at route
 
+
 # Setting up all the tables for the SQLAlchemy
 class Candidate(db.Model):
     __tablename__ = "Candidate"
@@ -12,10 +13,10 @@ class Candidate(db.Model):
     attendance = db.Column(db.Integer())
     course = db.Column(db.Text())
     data_year_id = db.Column(db.Integer())
-    # Only 1 foreign key from "Data_year" table
     # With 1 primary key
+    # Is the Foreign key for Result table
 
-    
+
 class Standard(db.Model):
     __tablename__ = "Standard"
     id = db.Column(db.Integer, primary_key=True)
@@ -25,9 +26,10 @@ class Standard(db.Model):
     standard_code = db.Column(db.Integer())
     course = db.Column(db.Text())
     standard_type = db.Column(db.Text())
+    # With 1 primary key
+    # Is the Foreign key for Result table
 
-    
-    
+
 class Result(db.Model):
     __tablename__ = "Result"
     id = db.Column(db.Integer, primary_key=True)
@@ -36,3 +38,5 @@ class Result(db.Model):
     course = db.Column(db.Text())
     grade = db.Column(db.Text())
     data_year = db.Column(db.Integer())
+    # With 1 primary key
+    # Using "Candidate" table and "Standard" as foreign keys

@@ -7,19 +7,23 @@
 
 
 {% block content %}
-<div class="loading"><div class="loading-text">Loading ~ </div></div>
-<form action="/subject_trend_filter2", method="post", class="subject-trend-filter-background">
+<div class="loading">
+    <div class="loading-text">Loading ~ </div>
+</div>
+<form action="/subject_trend_filter2" , method="post" , class="subject-trend-filter-background">
     <div class="subject-trend-filter-container1">
 
         <div class="subject-trend-filter-layout1">
-
+            <!--Descriptions-->
             <div class="subject-trend-filter-title">Subject Trend Filter</div>
-                The graph will contain the grades that students get in their SELECTED assessment over a SELECTED time interval:<br><br>
-                • Please SELECT the "YEAR INTERVAL" you want your graph to generate (from "Year of Start" to "Year of Finish")<br>
-                • Please SELECT the "COURSE" you want your graph to generate (e.g. "9DGT", "11DTP")<br><br>
+            The graph will contain the grades that students get in their SELECTED assessment over a SELECTED time
+            interval:<br><br>
+            • Please SELECT the "YEAR INTERVAL" you want your graph to generate (from "Year of Start" to "Year of
+            Finish")<br>
+            • Please SELECT the "COURSE" you want your graph to generate (e.g. "9DGT", "11DTP")<br><br>
 
             <div class="subject-trend-filter-layout2">
-                <!--Second drop down-->
+                <!--First drop down for starting year-->
                 <div class="subject-trend-filter-layout3">
                     <label class="subject-trend-filter-label">Year of Start</label>
                     <select name="start_year">
@@ -29,8 +33,8 @@
 
                     </select>
                 </div>
-                
 
+                <!--Second drop down for ending year-->
                 <div class="subject-trend-filter-layout3">
                     <label class="subject-trend-filter-label">Year of Ending</label>
                     <select name="end_year">
@@ -41,8 +45,8 @@
                     </select>
                 </div>
             </div>
-        
-            <!--Third drop down-->
+
+            <!--Subject drop down-->
             <div class="subject-trend-filter-layout3">
                 <label class="subject-trend-filter-label">Course</label>
                 <select name="course">
@@ -55,7 +59,7 @@
 
             <input type="submit" class="subject-trend-filter-button" value="Next Step">
         </div>
-        
+
     </div>
     <!--Data can be retreated in {route.py} by {request.form['name']}-->
 </form>
